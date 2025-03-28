@@ -21,7 +21,13 @@ func _spawn_client():
 	if queues[lane].size() < max_clients_per_lane:
 		var client = client_scene.instantiate()
 		client.position = Vector2(lane, spawn_area_y - (queues[lane].size() * 80))
+		# Darken based on queue position
+		var sprite = client.get_node("Cat-sketch")
+		var darkness_factor = 1.0 - (queues[lane].size() * 0.2)  # Reduce brightness per position
+		sprite.modulate = Color(darkness_factor, darkness_factor, darkness_factor)
+
 		add_child(client)
+		client.get_parent().move_child(client, 0)  # Moves it to the first position in the child list
 		queues[lane].append(client)
 	
 	await get_tree().create_timer(randf_range(2, 6)).timeout
@@ -31,8 +37,16 @@ func dismiss_client(lane: int):
 	if queues[lane].size() > 0:
 		var client = queues[lane].pop_front()
 		client.queue_free()
+		
+		# Move remaining clients up and update their shading
 		for i in range(queues[lane].size()):
-			queues[lane][i].position.y += 80  # Move remaining clients up
+			var remaining_client = queues[lane][i]
+			remaining_client.position.y += 80  
+			
+			# Recalculate darkness
+			var sprite = remaining_client.get_node("Cat-sketch")  # Adjust if necessary
+			var darkness_factor = 1.0 - (i * 0.2)  # Adjust brightness based on new index
+			sprite.modulate = Color(darkness_factor, darkness_factor, darkness_factor)
 
 func _process(_delta):
 	if Input.is_action_just_pressed("serve_order"):

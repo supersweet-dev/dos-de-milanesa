@@ -64,13 +64,6 @@ shape = SubResource("RectangleShape2D_80nbo")
 position = Vector2(1085, 321)
 shape = SubResource("RectangleShape2D_80nbo")
 
-[node name="ColorRect3" type="ColorRect" parent="."]
-offset_left = 23.0
-offset_top = 43.0
-offset_right = 142.0
-offset_bottom = 567.0
-color = Color(1, 0.6, 0.6, 1)
-
 [node name="Queue" parent="." instance=ExtResource("2_e2o6t")]
 position = Vector2(7.44487, -28.0653)
 
@@ -79,3 +72,10 @@ offset_top = 320.0
 offset_right = 1152.0
 offset_bottom = 440.0
 color = Color(0.704, 0.8, 0.7552, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="."]
+offset_left = 23.0
+offset_top = 43.0
+offset_right = 142.0
+offset_bottom = 567.0
+color = Color(1, 0.6, 0.6, 1)
