@@ -1,0 +1,81 @@
+[gd_scene load_steps=4 format=3 uid="uid://deytbm3kyu5oo"]
+
+[ext_resource type="PackedScene" uid="uid://i51w8muep7jl" path="res://player.tscn" id="1_80nbo"]
+[ext_resource type="PackedScene" uid="uid://b3a21rr1hs8xn" path="res://queue.tscn" id="2_e2o6t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_80nbo"]
+size = Vector2(216.75, 686)
+
+[node name="Game" type="Node2D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0.86, 0.734727, 0.5332, 1)
+
+[node name="ColorRect7" type="ColorRect" parent="."]
+offset_left = 336.0
+offset_right = 496.0
+offset_bottom = 648.0
+color = Color(0.7, 0.5824, 0.259, 0.470588)
+
+[node name="ColorRect9" type="ColorRect" parent="."]
+offset_left = 816.0
+offset_right = 976.0
+offset_bottom = 648.0
+color = Color(0.67, 0.287877, 0.2814, 0.4)
+
+[node name="ColorRect10" type="ColorRect" parent="."]
+offset_left = 656.0
+offset_right = 816.0
+offset_bottom = 648.0
+color = Color(0.7, 0.5824, 0.259, 0.470588)
+
+[node name="ColorRect8" type="ColorRect" parent="."]
+offset_left = 496.0
+offset_right = 656.0
+offset_bottom = 648.0
+color = Color(0.67, 0.287877, 0.2814, 0.4)
+
+[node name="ColorRect6" type="ColorRect" parent="."]
+offset_left = 176.0
+offset_right = 336.0
+offset_bottom = 648.0
+color = Color(0.67, 0.287877, 0.2814, 0.4)
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+offset_top = 389.0
+offset_right = 1153.0
+offset_bottom = 650.0
+color = Color(0.31, 0.121055, 0.0961, 0.431373)
+
+[node name="MiggyPiggy" parent="." instance=ExtResource("1_80nbo")]
+position = Vector2(249, 606)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(67.625, 329)
+shape = SubResource("RectangleShape2D_80nbo")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+position = Vector2(1085, 321)
+shape = SubResource("RectangleShape2D_80nbo")
+
+[node name="ColorRect3" type="ColorRect" parent="."]
+offset_left = 23.0
+offset_top = 43.0
+offset_right = 142.0
+offset_bottom = 567.0
+color = Color(1, 0.6, 0.6, 1)
+
+[node name="Queue" parent="." instance=ExtResource("2_e2o6t")]
+position = Vector2(7.44487, -28.0653)
+
+[node name="ColorRect4" type="ColorRect" parent="."]
+offset_top = 320.0
+offset_right = 1152.0
+offset_bottom = 440.0
+color = Color(0.704, 0.8, 0.7552, 1)

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3a21rr1hs8xn"]
+
+[ext_resource type="Script" uid="uid://cycx44my7empk" path="res://queue-system.gd" id="1_v6k7x"]
+
+[node name="Queue" type="Node2D"]
+script = ExtResource("1_v6k7x")

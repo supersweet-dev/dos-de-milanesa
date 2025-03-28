@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://i51w8muep7jl"]
+
+[ext_resource type="Texture2D" uid="uid://c0ibp5w851ihx" path="res://miggy-piggy-sketch.svg" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://cg70ewf3pl0c" path="res://player.gd" id="1_onrkg"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_onrkg"]
+radius = 36.0
+height = 146.0
+
+[node name="MiggyPiggy" type="CharacterBody2D"]
+script = ExtResource("1_onrkg")
+
+[node name="Miggy-piggy-sketch" type="Sprite2D" parent="."]
+position = Vector2(-1, -77)
+scale = Vector2(0.123616, 0.111878)
+texture = ExtResource("1_4flbx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -62)
+shape = SubResource("CapsuleShape2D_onrkg")
