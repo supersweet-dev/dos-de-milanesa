@@ -31,6 +31,17 @@ func _update_order_display(lane: int):
 		var front_client = queues[lane][0]
 		var order = front_client.order
 
+		# Create a container Node2D to hold everything
+		var order_container = Node2D.new()
+		lane_node.add_child(order_container)
+
+		# Create and add the bubble background sprite
+		var bubble_sprite = Sprite2D.new()
+		bubble_sprite.texture = preload("res://bubble.svg")  # Adjust path if needed
+		bubble_sprite.position = Vector2(40, 20)  # Adjust to fit nicely
+		bubble_sprite.scale = Vector2(1.8, 1.6)  # Adjust size
+		order_container.add_child(bubble_sprite)
+
 		# Create sprites for each ingredient
 		for i in range(order.size()):
 			var ingredient_sprite = Sprite2D.new()
@@ -42,7 +53,7 @@ func _update_order_display(lane: int):
 
 			ingredient_sprite.position = Vector2(x_pos, y_pos)
 			ingredient_sprite.scale = Vector2(0.04, 0.04)
-			lane_node.add_child(ingredient_sprite)
+			order_container.add_child(ingredient_sprite)
 
 func _spawn_client():
 	# Find available lanes
