@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c1k84k7mbscen"
-path="res://.godot/imported/cheese-placeholder.svg-ad9976bf9f6153e6a2c8a2be55a062cb.ctex"
+uid="uid://bdpt0g0s5nk46"
+path="res://.godot/imported/torta-shell-bot.svg-aebabe3a44a8230797635e5b5239c1c1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://cheese-placeholder.svg"
-dest_files=["res://.godot/imported/cheese-placeholder.svg-ad9976bf9f6153e6a2c8a2be55a062cb.ctex"]
+source_file="res://torta-shell-bot.svg"
+dest_files=["res://.godot/imported/torta-shell-bot.svg-aebabe3a44a8230797635e5b5239c1c1.ctex"]
 
 [params]
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://br7i86uuatocc"]
 
-[ext_resource type="Texture2D" uid="uid://1tge7e6s4dxi" path="res://ham-placeholder.svg" id="1_k3eqs"]
+[ext_resource type="Texture2D" uid="uid://1tge7e6s4dxi" path="res://ingredients/ham-placeholder.svg" id="1_k3eqs"]
 
 [node name="Ham" type="Node2D"]
 

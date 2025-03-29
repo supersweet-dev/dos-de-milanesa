@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6kpiq2x86y7c"
-path="res://.godot/imported/beans-placeholder.svg-3bee7fbe21d54512b1558b8015119169.ctex"
+uid="uid://1tge7e6s4dxi"
+path="res://.godot/imported/ham-placeholder.svg-5cf7a698ea72550b8a072973891e23a1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://beans-placeholder.svg"
-dest_files=["res://.godot/imported/beans-placeholder.svg-3bee7fbe21d54512b1558b8015119169.ctex"]
+source_file="res://ingredients/ham-placeholder.svg"
+dest_files=["res://.godot/imported/ham-placeholder.svg-5cf7a698ea72550b8a072973891e23a1.ctex"]
 
 [params]
 

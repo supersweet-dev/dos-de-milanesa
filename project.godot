@@ -15,6 +15,10 @@ run/main_scene="uid://deytbm3kyu5oo"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GameData="*res://game_data.gd"
+
 [input]
 
 move_left={

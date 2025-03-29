@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://1tge7e6s4dxi"
-path="res://.godot/imported/ham-placeholder.svg-09532b22ce497290fcf54301332e9ca7.ctex"
+uid="uid://ckxfmkydoed6b"
+path="res://.godot/imported/torta-shell-top.svg-c07096b5dfe89aed51545199dac9cca6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ham-placeholder.svg"
-dest_files=["res://.godot/imported/ham-placeholder.svg-09532b22ce497290fcf54301332e9ca7.ctex"]
+source_file="res://torta-shell-top.svg"
+dest_files=["res://.godot/imported/torta-shell-top.svg-c07096b5dfe89aed51545199dac9cca6.ctex"]
 
 [params]
 

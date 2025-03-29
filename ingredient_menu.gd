@@ -1,35 +1,45 @@
 extends Node2D
 
-@export var ingredient_textures: Array[Texture2D]  # Assign ingredient images here
 @onready var torta_container = $"../TortaContainer"  # Reference to the torta area
 
 var ingredient_index: int = 0
 var current_torta: Array[Texture2D] = []  # Tracks selected ingredients
+var submitted_tortas: Array  # Stores completed tortas for scoring
 
 @onready var previous_sprite = $PreviousIngredient
 @onready var current_sprite = $CurrentIngredient
 @onready var next_sprite = $NextIngredient
 
+const MAX_INGREDIENTS = 6  # Limit
+
 func _ready():
 	_update_display()
 
 func _update_display():
-	var total = ingredient_textures.size()
-	previous_sprite.texture = ingredient_textures[(ingredient_index - 1 + total) % total]
-	current_sprite.texture = ingredient_textures[ingredient_index]
-	next_sprite.texture = ingredient_textures[(ingredient_index + 1) % total]
+	var total = GameData.ingredients.size()
+	previous_sprite.texture = GameData.ingredients[(ingredient_index - 1 + total) % total]
+	current_sprite.texture = GameData.ingredients[ingredient_index]
+	next_sprite.texture = GameData.ingredients[(ingredient_index + 1) % total]
 
 func _process(_delta):
 	if Input.is_action_just_pressed("ingredients_up"):
-		ingredient_index = (ingredient_index - 1) % ingredient_textures.size()
+		ingredient_index = (ingredient_index - 1) % GameData.ingredients.size()
 		_update_display()
 	elif Input.is_action_just_pressed("ingredients_down"):
-		ingredient_index = (ingredient_index + 1) % ingredient_textures.size()
+		ingredient_index = (ingredient_index + 1) % GameData.ingredients.size()
 		_update_display()
 	elif Input.is_action_just_pressed("ingredients_add"):
-		_add_ingredient_to_torta(ingredient_textures[ingredient_index])
+		_add_ingredient_to_torta(GameData.ingredients[ingredient_index])
+	elif Input.is_action_just_pressed("serve_order"):
+		_submit_torta()
+	elif Input.is_action_just_pressed("trash_order"):
+		_clear_torta()
 
 func _add_ingredient_to_torta(texture: Texture2D):
+	if current_torta.size() >= MAX_INGREDIENTS:
+		print("Torta is full!")
+		return
+	
 	# Create new sprite
 	var new_ingredient = Sprite2D.new()
 	new_ingredient.texture = texture
@@ -40,3 +50,18 @@ func _add_ingredient_to_torta(texture: Texture2D):
 	# Track in torta list
 	current_torta.append(texture)
 	print("Current torta:", current_torta.size(), "ingredients added.")
+
+func _submit_torta():
+	if current_torta.is_empty():
+		print("No ingredients to submit!")
+		return
+	
+	submitted_tortas.append(current_torta.duplicate())  # Save for scoring
+	print("Torta submitted:", current_torta)
+	_clear_torta()  # Reset after submission
+
+func _clear_torta():
+	for child in torta_container.get_children():
+		child.queue_free()
+	current_torta.clear()
+	print("Torta cleared.")

@@ -3,10 +3,10 @@
 [ext_resource type="PackedScene" uid="uid://i51w8muep7jl" path="res://player.tscn" id="1_80nbo"]
 [ext_resource type="PackedScene" uid="uid://b3a21rr1hs8xn" path="res://queue.tscn" id="2_e2o6t"]
 [ext_resource type="PackedScene" uid="uid://c7jmnjwyek2rk" path="res://ingredient_menu.tscn" id="3_fc0e3"]
-[ext_resource type="Texture2D" uid="uid://c1k84k7mbscen" path="res://cheese-placeholder.svg" id="4_j5wjh"]
 [ext_resource type="Texture2D" uid="uid://bihuud7sn7ta" path="res://ingredient-frame.svg" id="5_7jktm"]
-[ext_resource type="Texture2D" uid="uid://1tge7e6s4dxi" path="res://ham-placeholder.svg" id="5_vef74"]
-[ext_resource type="Texture2D" uid="uid://c6kpiq2x86y7c" path="res://beans-placeholder.svg" id="6_hve3p"]
+[ext_resource type="Script" uid="uid://cfm1k00kkoese" path="res://order_lanes.gd" id="7_eow3j"]
+[ext_resource type="Texture2D" uid="uid://bdpt0g0s5nk46" path="res://torta-shell-bot.svg" id="8_vef74"]
+[ext_resource type="Texture2D" uid="uid://ckxfmkydoed6b" path="res://torta-shell-top.svg" id="9_hve3p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_80nbo"]
 size = Vector2(216.75, 686)
@@ -78,6 +78,13 @@ offset_right = 1152.0
 offset_bottom = 440.0
 color = Color(0.704, 0.8, 0.7552, 1)
 
+[node name="ColorRect5" type="ColorRect" parent="."]
+offset_left = 993.0
+offset_top = 187.0
+offset_right = 1137.0
+offset_bottom = 542.0
+color = Color(0.89, 0.805153, 0.7921, 1)
+
 [node name="ColorRect3" type="ColorRect" parent="."]
 offset_left = 23.0
 offset_top = 248.0
@@ -87,12 +94,38 @@ color = Color(0.89, 0.805153, 0.7921, 1)
 
 [node name="IngredientsMenu" parent="." instance=ExtResource("3_fc0e3")]
 position = Vector2(79, 352)
-ingredient_textures = Array[Texture2D]([ExtResource("4_j5wjh"), ExtResource("5_vef74"), ExtResource("6_hve3p")])
+
+[node name="Torta-shell-bot" type="Sprite2D" parent="."]
+position = Vector2(1070, 497)
+texture = ExtResource("8_vef74")
 
 [node name="TortaContainer" type="Node2D" parent="."]
-position = Vector2(1069, 411)
+position = Vector2(1069, 267)
 
 [node name="IngredientFrame" type="Sprite2D" parent="."]
 position = Vector2(79, 352)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("5_7jktm")
+
+[node name="Torta-shell-top" type="Sprite2D" parent="."]
+position = Vector2(1066, 240)
+texture = ExtResource("9_hve3p")
+
+[node name="OrderLanes" type="Node2D" parent="."]
+position = Vector2(536, 306)
+script = ExtResource("7_eow3j")
+
+[node name="Lane1" type="Node2D" parent="OrderLanes"]
+position = Vector2(-320, 50)
+
+[node name="Lane2" type="Node2D" parent="OrderLanes"]
+position = Vector2(-160, 50)
+
+[node name="Lane3" type="Node2D" parent="OrderLanes"]
+position = Vector2(0, 50)
+
+[node name="Lane4" type="Node2D" parent="OrderLanes"]
+position = Vector2(160, 50)
+
+[node name="Lane5" type="Node2D" parent="OrderLanes"]
+position = Vector2(320, 50)

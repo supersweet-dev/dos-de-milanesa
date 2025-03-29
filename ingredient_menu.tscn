@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://c7jmnjwyek2rk"]
 
 [ext_resource type="Script" uid="uid://d3qksunxfac1k" path="res://ingredient_menu.gd" id="1_8ykuq"]
-[ext_resource type="Texture2D" uid="uid://1tge7e6s4dxi" path="res://ham-placeholder.svg" id="2_nkujh"]
-[ext_resource type="Texture2D" uid="uid://c1k84k7mbscen" path="res://cheese-placeholder.svg" id="3_wvgyp"]
-[ext_resource type="Texture2D" uid="uid://c6kpiq2x86y7c" path="res://beans-placeholder.svg" id="4_2vrpr"]
+[ext_resource type="Texture2D" uid="uid://1tge7e6s4dxi" path="res://ingredients/ham-placeholder.svg" id="2_nkujh"]
+[ext_resource type="Texture2D" uid="uid://c1k84k7mbscen" path="res://ingredients/cheese-placeholder.svg" id="3_wvgyp"]
+[ext_resource type="Texture2D" uid="uid://c6kpiq2x86y7c" path="res://ingredients/beans-placeholder.svg" id="4_2vrpr"]
 
 [node name="IngredientMenu" type="Node2D"]
 scale = Vector2(0.25, 0.25)
