@@ -22,5 +22,3 @@ texture = ExtResource("2_nkujh")
 position = Vector2(0, 260)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("4_2vrpr")
-
-[node name="TortaContainer" type="Node2D" parent="."]
