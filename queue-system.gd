@@ -1,4 +1,5 @@
 extends Node2D
+@onready var ingredient_menu = $"../IngredientsMenu"
 var lane_width: int = 160
 var first_lane: int = 256
 @export var lanes: Array[int] = [first_lane, first_lane + (lane_width * 1), first_lane + (lane_width * 2), first_lane + (lane_width * 3), first_lane + (lane_width * 4)]
@@ -13,7 +14,37 @@ func _ready():
 	player = get_node("../MiggyPiggy") 
 	for lane in lanes:
 		queues[lane] = []  # Initialize lane queues
+	ingredient_menu.torta_submitted.connect(_on_torta_submitted)
 	_spawn_client()  # Start the spawning cycle
+	
+func _on_torta_submitted(torta: Array):
+	var closest_lane = _get_closest_lane(player.position.x)
+	if queues[closest_lane].size() > 0:
+		var front_client = queues[closest_lane][0]
+		var expected_order = front_client.order
+
+		# Compare order
+		if _orders_match(expected_order, torta):
+			dismiss_client(closest_lane)
+			print("Correct torta! Client dismissed.")
+		else:
+			print("Wrong torta! Client stays.")
+
+func _orders_match(order1: Array, order2: Array) -> bool:
+	# Convert both arrays into dictionaries with ingredient counts
+	var count1 = _count_ingredients(order1)
+	var count2 = _count_ingredients(order2)
+
+	return count1 == count2  # Check if the ingredient counts match
+
+func _count_ingredients(order: Array) -> Dictionary:
+	var count = {}
+	for ingredient in order:
+		if ingredient in count:
+			count[ingredient] += 1
+		else:
+			count[ingredient] = 1
+	return count
 	
 func _update_order_display(lane: int):
 	var lane_index = lanes.find(lane)  
@@ -103,11 +134,6 @@ func dismiss_client(lane: int):
 		
 		# Update order display (will clear if lane is now empty)
 		_update_order_display(lane)
-
-func _process(_delta):
-	if Input.is_action_just_pressed("serve_order"):
-		var closest_lane = _get_closest_lane(player.position.x)
-		dismiss_client(closest_lane)
 
 func _get_closest_lane(player_x: float) -> int:
 	var closest_lane = lanes[0]

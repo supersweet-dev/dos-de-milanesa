@@ -4,7 +4,7 @@ extends Node2D
 
 var ingredient_index: int = 0
 var current_torta: Array[Texture2D] = []  # Tracks selected ingredients
-var submitted_tortas: Array  # Stores completed tortas for scoring
+signal torta_submitted(torta: Array)  # Declare signal
 
 @onready var previous_sprite = $PreviousIngredient
 @onready var current_sprite = $CurrentIngredient
@@ -55,9 +55,8 @@ func _submit_torta():
 	if current_torta.is_empty():
 		print("No ingredients to submit!")
 		return
-	
-	submitted_tortas.append(current_torta.duplicate())  # Save for scoring
 	print("Torta submitted:", current_torta)
+	torta_submitted.emit(current_torta)
 	_clear_torta()  # Reset after submission
 
 func _clear_torta():
