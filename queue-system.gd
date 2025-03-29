@@ -10,7 +10,6 @@ var first_lane: int = 256
 var queues: Dictionary = {}
 
 func _ready():
-	print("ready")
 	player = get_node("../MiggyPiggy") 
 	for lane in lanes:
 		queues[lane] = []  # Initialize lane queues
@@ -30,7 +29,7 @@ func _spawn_client():
 		client.get_parent().move_child(client, 0)  # Moves it to the first position in the child list
 		queues[lane].append(client)
 	
-	await get_tree().create_timer(randf_range(2, 6)).timeout
+	await get_tree().create_timer(randf_range(1, 4)).timeout
 	_spawn_client()
 
 func dismiss_client(lane: int):

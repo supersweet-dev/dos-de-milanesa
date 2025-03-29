@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://c7jmnjwyek2rk"]
+
+[ext_resource type="Script" uid="uid://d3qksunxfac1k" path="res://ingredient_menu.gd" id="1_8ykuq"]
+[ext_resource type="Texture2D" uid="uid://1tge7e6s4dxi" path="res://ham-placeholder.svg" id="2_nkujh"]
+[ext_resource type="Texture2D" uid="uid://c1k84k7mbscen" path="res://cheese-placeholder.svg" id="3_wvgyp"]
+[ext_resource type="Texture2D" uid="uid://c6kpiq2x86y7c" path="res://beans-placeholder.svg" id="4_2vrpr"]
+
+[node name="IngredientMenu" type="Node2D"]
+scale = Vector2(0.25, 0.25)
+script = ExtResource("1_8ykuq")
+
+[node name="PreviousIngredient" type="Sprite2D" parent="."]
+position = Vector2(0, -252)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_wvgyp")
+
+[node name="CurrentIngredient" type="Sprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_nkujh")
+
+[node name="NextIngredient" type="Sprite2D" parent="."]
+position = Vector2(0, 260)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_2vrpr")
+
+[node name="TortaContainer" type="Node2D" parent="."]

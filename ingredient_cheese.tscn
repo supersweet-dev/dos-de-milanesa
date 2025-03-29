@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bkovsakoy1t73"]
+
+[ext_resource type="Texture2D" uid="uid://c1k84k7mbscen" path="res://cheese-placeholder.svg" id="1_iukc8"]
+
+[node name="Cheese" type="Node2D"]
+
+[node name="Cheese-placeholder" type="Sprite2D" parent="."]
+position = Vector2(-2, 1)
+scale = Vector2(0.13, 0.13)
+texture = ExtResource("1_iukc8")
