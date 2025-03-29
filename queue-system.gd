@@ -8,9 +8,13 @@ var first_lane: int = 256
 @export var max_clients_per_lane: int = 3
 @export var player: CharacterBody2D
 
+@onready var score_label = $"../Score"
+var score: int = 0
+
 var queues: Dictionary = {}
 
 func _ready():
+	_update_score_display(score)
 	player = get_node("../MiggyPiggy") 
 	for lane in lanes:
 		queues[lane] = []  # Initialize lane queues
@@ -25,11 +29,14 @@ func _on_torta_submitted(torta: Array):
 
 		# Compare order
 		if _orders_match(expected_order, torta):
-			dismiss_client(closest_lane)
-			print("Correct torta! Client dismissed.")
+			score += 1
 		else:
-			print("Wrong torta! Client stays.")
-
+			score -= 1
+		_update_score_display(score)
+		dismiss_client(closest_lane)
+func _update_score_display(new_score: int):
+	if score_label:
+		score_label.text = "Puntos:\n" + str(new_score)
 func _orders_match(order1: Array, order2: Array) -> bool:
 	# Convert both arrays into dictionaries with ingredient counts
 	var count1 = _count_ingredients(order1)

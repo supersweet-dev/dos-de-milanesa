@@ -129,3 +129,11 @@ position = Vector2(160, 50)
 
 [node name="Lane5" type="Node2D" parent="OrderLanes"]
 position = Vector2(320, 50)
+
+[node name="Score" type="Label" parent="."]
+offset_left = 998.0
+offset_top = 70.0
+offset_right = 1036.0
+offset_bottom = 109.0
+scale = Vector2(2.29808, 2.22637)
+text = "???"
