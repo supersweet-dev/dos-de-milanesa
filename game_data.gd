@@ -1,22 +1,17 @@
 extends Node
 
-var ingredients: Array[Texture2D] = []  # Holds all ingredient textures
+var ingredients: Array[Texture2D] = [
+	preload("res://ingredients/beans.svg"),
+	preload("res://ingredients/cheese.svg"),
+	preload("res://ingredients/ham.svg")
+]
 
-func _ready():
-	_load_ingredients_from_folder("res://ingredients/")
-
-func _load_ingredients_from_folder(folder_path: String):
-	var dir = DirAccess.open(folder_path)
-	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if file_name.ends_with(".svg"):  # Add more formats if needed
-				var texture = load(folder_path + file_name) as Texture2D
-				if texture:
-					ingredients.append(texture)
-			file_name = dir.get_next()
-		print("Loaded ingredients:", ingredients.size())
+var clients: Array[Texture2D] = [
+	preload("res://clients/cat-sketch.svg"),
+	preload("res://clients/chameleon-sketch.svg"),
+	preload("res://clients/mammoth-sketch.svg"),
+	preload("res://clients/xolo-sketch.svg")
+]
 
 func get_random_order():
 	var order_size = randi_range(1, 6)

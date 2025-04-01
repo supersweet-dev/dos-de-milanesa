@@ -52,9 +52,6 @@ func _add_ingredient_to_torta(texture: Texture2D):
 	print("Current torta:", current_torta.size(), "ingredients added.")
 
 func _submit_torta():
-	if current_torta.is_empty():
-		print("No ingredients to submit!")
-		return
 	print("Torta submitted:", current_torta)
 	torta_submitted.emit(current_torta)
 	_clear_torta()  # Reset after submission

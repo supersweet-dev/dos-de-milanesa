@@ -108,8 +108,9 @@ func _spawn_client():
 
 		client.set_order(GameData.get_random_order())
 
-		# Darken based on queue position
-		var sprite = client.get_node("Cat-sketch")
+		var random_texture = GameData.clients[randi() % GameData.clients.size()]
+		var sprite = client.get_node("ClientSprite")
+		sprite.texture = random_texture
 		var darkness_factor = 1.0 - (queues[lane].size() * 0.2)
 		sprite.modulate = Color(darkness_factor, darkness_factor, darkness_factor)
 
@@ -135,7 +136,7 @@ func dismiss_client(lane: int):
 			remaining_client.position.y += 80  
 			
 			# Recalculate darkness
-			var sprite = remaining_client.get_node("Cat-sketch")
+			var sprite = remaining_client.get_node("ClientSprite")
 			var darkness_factor = 1.0 - (i * 0.2)
 			sprite.modulate = Color(darkness_factor, darkness_factor, darkness_factor)
 		
