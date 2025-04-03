@@ -1,12 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://deytbm3kyu5oo"]
+[gd_scene load_steps=10 format=3 uid="uid://deytbm3kyu5oo"]
 
 [ext_resource type="PackedScene" uid="uid://i51w8muep7jl" path="res://player.tscn" id="1_80nbo"]
 [ext_resource type="PackedScene" uid="uid://b3a21rr1hs8xn" path="res://queue.tscn" id="2_e2o6t"]
 [ext_resource type="PackedScene" uid="uid://c7jmnjwyek2rk" path="res://ingredient_menu.tscn" id="3_fc0e3"]
-[ext_resource type="Texture2D" uid="uid://bihuud7sn7ta" path="res://ingredient-frame.svg" id="5_7jktm"]
+[ext_resource type="Texture2D" uid="uid://bihuud7sn7ta" path="res://assets/game-ui/ingredient-frame.svg" id="5_7jktm"]
 [ext_resource type="Script" uid="uid://cfm1k00kkoese" path="res://order_lanes.gd" id="7_eow3j"]
-[ext_resource type="Texture2D" uid="uid://bdpt0g0s5nk46" path="res://torta-shell-bot.svg" id="8_vef74"]
-[ext_resource type="Texture2D" uid="uid://ckxfmkydoed6b" path="res://torta-shell-top.svg" id="9_hve3p"]
+[ext_resource type="AudioStream" uid="uid://c10kpnphnumkh" path="res://assets/sounds/music/main-theme.mp3" id="8_j5wjh"]
+[ext_resource type="Texture2D" uid="uid://bdpt0g0s5nk46" path="res://assets/game-ui/torta-shell-bot.svg" id="8_vef74"]
+[ext_resource type="Texture2D" uid="uid://ckxfmkydoed6b" path="res://assets/game-ui/torta-shell-top.svg" id="9_hve3p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_80nbo"]
 size = Vector2(216.75, 686)
@@ -137,3 +138,11 @@ offset_right = 1038.0
 offset_bottom = 109.0
 scale = Vector2(2.29808, 2.22637)
 text = "???"
+
+[node name="GameTimer" type="Timer" parent="."]
+wait_time = 180.0
+one_shot = true
+
+[node name="BackgroundMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_j5wjh")
+autoplay = true

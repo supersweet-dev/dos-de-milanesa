@@ -8,6 +8,7 @@ var first_lane: int = 256
 @export var max_clients_per_lane: int = 3
 @export var player: CharacterBody2D
 
+@onready var game_timer = $"../GameTimer"
 @onready var score_label = $"../Score"
 var score: int = 0
 
@@ -15,11 +16,18 @@ var queues: Dictionary = {}
 
 func _ready():
 	_update_score_display(score)
+	game_timer.timeout.connect(_on_game_timer_timeout)
+	game_timer.start()
 	player = get_node("../MiggyPiggy") 
 	for lane in lanes:
 		queues[lane] = []  # Initialize lane queues
 	ingredient_menu.torta_submitted.connect(_on_torta_submitted)
 	_spawn_client()  # Start the spawning cycle
+func _on_game_timer_timeout():
+	_show_final_score()
+func _show_final_score():
+	GameData.final_score = score
+	get_tree().change_scene_to_file("res://score.tscn") 
 	
 func _on_torta_submitted(torta: Array):
 	var closest_lane = _get_closest_lane(player.position.x)
@@ -75,7 +83,7 @@ func _update_order_display(lane: int):
 
 		# Create and add the bubble background sprite
 		var bubble_sprite = Sprite2D.new()
-		bubble_sprite.texture = preload("res://bubble.svg")  # Adjust path if needed
+		bubble_sprite.texture = preload("res://assets/game-ui/bubble.svg")  # Adjust path if needed
 		bubble_sprite.position = Vector2(40, 20)  # Adjust to fit nicely
 		bubble_sprite.scale = Vector2(1.8, 1.6)  # Adjust size
 		order_container.add_child(bubble_sprite)

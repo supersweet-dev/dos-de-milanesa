@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Dos De Milanesa"
-run/main_scene="uid://deytbm3kyu5oo"
+run/main_scene="uid://chni70fyhbktl"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 

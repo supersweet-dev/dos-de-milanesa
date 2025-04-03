@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://chni70fyhbktl"]
+
+[ext_resource type="Script" uid="uid://biqb2txou787i" path="res://main_menu.gd" id="1_eiy7p"]
+[ext_resource type="Texture2D" uid="uid://d2agdu3lyumfi" path="res://assets/menus/title-screen.svg" id="1_i26rj"]
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_eiy7p")
+
+[node name="TitleScreen" type="Sprite2D" parent="."]
+position = Vector2(597, 338)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("1_i26rj")
+offset = Vector2(-34.9999, -23.3333)
+
+[node name="StartButton" type="Button" parent="."]
+offset_left = 798.0
+offset_top = 394.0
+offset_right = 935.0
+offset_bottom = 455.0
+scale = Vector2(2, 2)
+text = "ABRIR EL
+CHANGARRO"

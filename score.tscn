@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://cege14q1ja50n"]
+
+[ext_resource type="Script" uid="uid://dd2h1u3oir7im" path="res://score.gd" id="1_ceanc"]
+[ext_resource type="Texture2D" uid="uid://cfdjcl6emas3k" path="res://assets/menus/score-screen.svg" id="1_t1x8i"]
+
+[node name="Score" type="Node2D"]
+script = ExtResource("1_ceanc")
+
+[node name="Score-screen" type="Sprite2D" parent="."]
+position = Vector2(578, 326)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("1_t1x8i")
+
+[node name="ClosingText" type="Label" parent="."]
+offset_left = 582.0
+offset_top = 339.0
+offset_right = 757.0
+offset_bottom = 384.0
+scale = Vector2(2, 2)
+pivot_offset = Vector2(28, 28)
+text = "Eso estuvo pesado..."
+
+[node name="FinalScore" type="Label" parent="."]
+offset_left = 559.0
+offset_top = 388.0
+offset_right = 754.0
+offset_bottom = 417.0
+scale = Vector2(2, 2)
+text = "Hoy ganamos: "
+
+[node name="MenuButton" type="Button" parent="."]
+offset_left = 662.0
+offset_top = 502.0
+offset_right = 738.0
+offset_bottom = 533.0
+scale = Vector2(2, 2)
+text = "Reiniciar
+"
