@@ -9,11 +9,11 @@ var ingredients: Array[Texture2D] = [
 ]
 
 var clients: Array[Texture2D] = [
-	#preload("res://assets/clients/cat-sketch.svg"),
-	#preload("res://assets/clients/chameleon-sketch.svg"),
-	#preload("res://assets/clients/mammoth-sketch.svg"),
-	#preload("res://assets/clients/xolo-sketch.svg")
-	preload("res://assets/clients/percy-debug-full.svg")
+	preload("res://assets/clients/cat-sketch.svg"),
+	preload("res://assets/clients/chameleon-sketch.svg"),
+	preload("res://assets/clients/mammoth-sketch.svg"),
+	preload("res://assets/clients/xolo-sketch.svg"),
+	#preload("res://assets/clients/percy-debug-full.svg")
 ]
 
 func get_random_order():
