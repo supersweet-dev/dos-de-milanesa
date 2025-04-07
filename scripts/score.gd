@@ -8,4 +8,4 @@ func _ready():
 	final_score_label.text = "Hoy Ganamos: " + str(GameData.final_score) 
 
 func _on_menu_pressed():
-	get_tree().change_scene_to_file("res://MainMenu.tscn")  
+	get_tree().change_scene_to_file("res://scenes/screens/main_menu.tscn")  

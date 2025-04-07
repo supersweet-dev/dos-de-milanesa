@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://j7da722ie6gx"]
+
+[ext_resource type="Script" uid="uid://bttou8oikmoyl" path="res://scenes/screens/controls.gd" id="1_1gdgj"]
+[ext_resource type="Texture2D" uid="uid://ckf88cdx80i4e" path="res://assets/menus/instructions-es.svg" id="2_1gdgj"]
+
+[node name="Controls" type="Node2D"]
+script = ExtResource("1_1gdgj")
+
+[node name="Controls-screen" type="Sprite2D" parent="."]
+texture = ExtResource("2_1gdgj")
+centered = false
+
+[node name="MenuButton" type="Button" parent="."]
+offset_left = 1576.0
+offset_top = 912.0
+offset_right = 1652.0
+offset_bottom = 943.0
+scale = Vector2(2, 2)
+text = "MENU
+"
+
+[node name="LanguageButton" type="Button" parent="."]
+offset_left = 1576.0
+offset_top = 836.0
+offset_right = 1652.0
+offset_bottom = 867.0
+scale = Vector2(2, 2)
+text = "ENGLISH
+"

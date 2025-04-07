@@ -1,16 +1,16 @@
 extends Node2D
 
-@onready var torta_container = $"../TortaContainer"  # Reference to the torta area
+@onready var torta_container = $"../TortaContainer" # Reference to the torta area
 
 var ingredient_index: int = 0
-var current_torta: Array[Texture2D] = []  # Tracks selected ingredients
-signal torta_submitted(torta: Array)  # Declare signal
+var current_torta: Array[Texture2D] = [] # Tracks selected ingredients
+signal torta_submitted(torta: Array) # Declare signal
 
 @onready var previous_sprite = $PreviousIngredient
 @onready var current_sprite = $CurrentIngredient
 @onready var next_sprite = $NextIngredient
 
-const MAX_INGREDIENTS = 6  # Limit
+const MAX_INGREDIENTS = 6 # Limit
 
 func _ready():
 	_update_display()
@@ -37,27 +37,24 @@ func _process(_delta):
 
 func _add_ingredient_to_torta(texture: Texture2D):
 	if current_torta.size() >= MAX_INGREDIENTS:
-		print("Torta is full!")
+		# Limit reached
 		return
-	
+
 	# Create new sprite
 	var new_ingredient = Sprite2D.new()
 	new_ingredient.texture = texture
-	new_ingredient.scale = Vector2(0.08, 0.08) 
-	new_ingredient.position = Vector2(0, torta_container.get_child_count() * 40)  # Stack them downwards
+	new_ingredient.scale = Vector2(0.1, 0.1)
+	new_ingredient.position = Vector2(0, torta_container.get_child_count() * 40) # Stack them downwards
 	torta_container.add_child(new_ingredient)
 
 	# Track in torta list
 	current_torta.append(texture)
-	print("Current torta:", current_torta.size(), "ingredients added.")
 
 func _submit_torta():
-	print("Torta submitted:", current_torta)
 	torta_submitted.emit(current_torta)
-	_clear_torta()  # Reset after submission
+	_clear_torta() # Reset after submission
 
 func _clear_torta():
 	for child in torta_container.get_children():
 		child.queue_free()
 	current_torta.clear()
-	print("Torta cleared.")
