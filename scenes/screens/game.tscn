@@ -1,7 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://deytbm3kyu5oo"]
+[gd_scene load_steps=14 format=3 uid="uid://deytbm3kyu5oo"]
 
+[ext_resource type="Texture2D" uid="uid://bh65x0sqwcqj" path="res://assets/sets/floor.png" id="1_e0wmo"]
 [ext_resource type="PackedScene" uid="uid://i51w8muep7jl" path="res://scenes/player.tscn" id="1_kauht"]
-[ext_resource type="Texture2D" uid="uid://de0ksvun5qil" path="res://assets/game-ui/test-bg.png" id="1_yruvw"]
 [ext_resource type="PackedScene" uid="uid://b3a21rr1hs8xn" path="res://scenes/queue.tscn" id="2_yruvw"]
 [ext_resource type="PackedScene" uid="uid://c7jmnjwyek2rk" path="res://scenes/ingredient_menu.tscn" id="3_vsgdc"]
 [ext_resource type="Texture2D" uid="uid://bdpt0g0s5nk46" path="res://assets/game-ui/torta-shell-bot.svg" id="4_ggwlb"]
@@ -9,18 +9,26 @@
 [ext_resource type="Texture2D" uid="uid://ckxfmkydoed6b" path="res://assets/game-ui/torta-shell-top.svg" id="6_xrk1x"]
 [ext_resource type="Script" uid="uid://cfm1k00kkoese" path="res://scripts/order_lanes.gd" id="7_oni8f"]
 [ext_resource type="AudioStream" uid="uid://c10kpnphnumkh" path="res://assets/sounds/music/main-theme.mp3" id="8_s3n12"]
+[ext_resource type="Texture2D" uid="uid://np5njfjmdrex" path="res://assets/sets/counter.png" id="9_yruvw"]
+[ext_resource type="Texture2D" uid="uid://cwamwhi66m7mi" path="res://assets/sets/walls.png" id="11_xrk1x"]
+[ext_resource type="Texture2D" uid="uid://b6033gv7xbphe" path="res://assets/sets/flare.png" id="12_oni8f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_80nbo"]
 size = Vector2(300, 1080)
 
 [node name="Game" type="Node2D"]
 
-[node name="Test-bg" type="Sprite2D" parent="."]
-texture = ExtResource("1_yruvw")
+[node name="Floor" type="Sprite2D" parent="."]
+texture = ExtResource("1_e0wmo")
 centered = false
 
-[node name="MiggyPiggy" parent="." instance=ExtResource("1_kauht")]
-position = Vector2(430, 1061)
+[node name="Walls" type="Sprite2D" parent="."]
+texture = ExtResource("11_xrk1x")
+centered = false
+
+[node name="Flare" type="Sprite2D" parent="Walls"]
+texture = ExtResource("12_oni8f")
+centered = false
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
@@ -34,6 +42,11 @@ shape = SubResource("RectangleShape2D_80nbo")
 
 [node name="Queue" parent="." instance=ExtResource("2_yruvw")]
 position = Vector2(7.44487, -28.0653)
+
+[node name="Counter" type="Sprite2D" parent="Queue"]
+position = Vector2(-7.44487, 28.0653)
+texture = ExtResource("9_yruvw")
+centered = false
 
 [node name="IngredientsMenu" parent="." instance=ExtResource("3_vsgdc")]
 position = Vector2(148.2, 603)
@@ -74,6 +87,9 @@ position = Vector2(264, 0)
 
 [node name="Lane5" type="Node2D" parent="OrderLanes"]
 position = Vector2(528, 0)
+
+[node name="MiggyPiggy" parent="." instance=ExtResource("1_kauht")]
+position = Vector2(430, 1061)
 
 [node name="Score" type="Label" parent="."]
 offset_left = 1722.0
