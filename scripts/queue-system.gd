@@ -46,7 +46,8 @@ func _on_torta_submitted(torta: Array):
 	if queues[closest_lane].size() > 0:
 		var front_client = queues[closest_lane][0]
 		var expected_order = front_client.order
-		_evaluate_order(expected_order, torta)
+		score += front_client.order_checker.call(expected_order, torta, front_client.tip_amount)
+		_update_score_display(score)
 		dismiss_client(closest_lane)
 	else:
 		_apply_penalty(torta)
@@ -55,20 +56,7 @@ func _on_torta_trashed(torta: Array):
 func _update_score_display(new_score: int):
 	if score_label:
 		score_label.text = "Total:\n$" + str(new_score)
-func _evaluate_order(target_order: Array, submitted_torta: Array):
-	# Calcualte price of ingredients in torta using INGREDIENTS dictionary
-	var total_price = 0
-	for ingredient in submitted_torta:
-		if ingredient in INGREDIENT_KEYS:
-			total_price += INGREDIENTS[ingredient].price
-	# Convert both arrays into dictionaries with ingredient counts
-	var count1 = _count_ingredients(target_order)
-	var count2 = _count_ingredients(submitted_torta)
-	if (count1 == count2):
-		score += total_price
-	else:
-		score -= total_price
-	_update_score_display(score)
+
 func _apply_penalty(trashed_torta: Array):
 	# Calculate penalty based on the number of ingredients in the torta
 	var penalty = 0
@@ -160,12 +148,14 @@ func _spawn_client():
 		var lane = available_lanes[randi() % available_lanes.size()]
 		var queue = queues[lane]
 		var client = client_scene.instantiate()
+		var client_type = GameData.clients[GameData.clients.keys()[randi() % GameData.clients.size()]]
 		client.position = Vector2(lane, spawn_area_y - (queue.size() * CLIENT_VERTICAL_SPACING))
-		client.set_order(GameData.get_random_order())
-
-		var random_texture = GameData.clients[randi() % GameData.clients.size()]
+		var client_order = GameData.get_random_order(client_type.ingredient_preferences, client_type.order_min, client_type.order_max)
+		client.set_order(client_order)
+		client.set_checker(client_type.order_evaluation)
+		client.set_tip(client_type.tip_amount)
 		var sprite = client.get_node("ClientSprite")
-		sprite.texture = random_texture
+		sprite.texture = client_type.texture
 		var darkness_factor = 1.0 - (queue.size() * CLIENT_DARKNESS_FACTOR)
 		sprite.modulate = Color(darkness_factor, darkness_factor, darkness_factor)
 
