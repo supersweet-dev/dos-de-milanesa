@@ -11,6 +11,7 @@ extends Node2D
 @onready var game_timer = $"../GameTimer"
 @onready var score_label = $"../Score"
 
+const INGREDIENTS = GameData.ingredients
 const BUBBLE_TEXTURE = preload("res://assets/game-ui/bubble.svg")
 const CLIENT_VERTICAL_SPACING = 180
 const CLIENT_DARKNESS_FACTOR = 0.2
@@ -53,7 +54,7 @@ func _on_torta_submitted(torta: Array):
 		dismiss_client(closest_lane)
 func _update_score_display(new_score: int):
 	if score_label:
-		score_label.text = "Puntos:\n" + str(new_score)
+		score_label.text = "Total:\n$" + str(new_score)
 func _orders_match(order1: Array, order2: Array) -> bool:
 	# Convert both arrays into dictionaries with ingredient counts
 	var count1 = _count_ingredients(order1)
@@ -117,7 +118,7 @@ func _update_order_display(lane: int):
 		# Create sprites for each ingredient
 		for i in range(ingredient_count):
 			var ingredient_sprite = Sprite2D.new()
-			ingredient_sprite.texture = order[i]
+			ingredient_sprite.texture = INGREDIENTS[order[i]].texture
 			ingredient_sprite.scale = INGREDIENT_SCALE
 
 			# Calculate position in grid
