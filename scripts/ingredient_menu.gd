@@ -5,6 +5,7 @@ extends Node2D
 var ingredient_index: int = 0
 var current_torta: Array[String] = [] # Tracks selected ingredients
 signal torta_submitted(torta: Array) # Declare signal
+signal torta_trashed(torta: Array) # Declare signal
 
 @onready var previous_sprite = $PreviousIngredient
 @onready var current_sprite = $CurrentIngredient
@@ -35,7 +36,7 @@ func _process(_delta):
 	elif Input.is_action_just_pressed("serve_order"):
 		_submit_torta()
 	elif Input.is_action_just_pressed("trash_order"):
-		_clear_torta()
+		_trash_torta()
 
 func _add_ingredient_to_torta(key: String):
 	if current_torta.size() >= MAX_INGREDIENTS:
@@ -53,9 +54,12 @@ func _add_ingredient_to_torta(key: String):
 	current_torta.append(key)
 
 func _submit_torta():
-	print("Submitting torta: ", current_torta)
 	torta_submitted.emit(current_torta)
 	_clear_torta() # Reset after submission
+
+func _trash_torta():
+	torta_trashed.emit(current_torta)
+	_clear_torta() # Reset after trashing
 
 func _clear_torta():
 	for child in torta_container.get_children():

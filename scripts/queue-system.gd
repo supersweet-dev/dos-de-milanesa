@@ -12,6 +12,7 @@ extends Node2D
 @onready var score_label = $"../Score"
 
 const INGREDIENTS = GameData.ingredients
+var INGREDIENT_KEYS = GameData.ingredients.keys()
 const BUBBLE_TEXTURE = preload("res://assets/game-ui/bubble.svg")
 const CLIENT_VERTICAL_SPACING = 180
 const CLIENT_DARKNESS_FACTOR = 0.2
@@ -32,6 +33,7 @@ func _ready():
 	for lane in lanes:
 		queues[lane] = [] # Initialize lane queues
 	ingredient_menu.torta_submitted.connect(_on_torta_submitted)
+	ingredient_menu.torta_trashed.connect(_on_torta_trashed)
 	_spawn_client() # Start the spawning cycle
 func _on_game_timer_timeout():
 	_show_final_score()
@@ -44,23 +46,38 @@ func _on_torta_submitted(torta: Array):
 	if queues[closest_lane].size() > 0:
 		var front_client = queues[closest_lane][0]
 		var expected_order = front_client.order
-
-		# Compare order
-		if _orders_match(expected_order, torta):
-			score += 1
-		else:
-			score -= 1
-		_update_score_display(score)
+		_evaluate_order(expected_order, torta)
 		dismiss_client(closest_lane)
+	else:
+		_apply_penalty(torta)
+func _on_torta_trashed(torta: Array):
+	_apply_penalty(torta)
 func _update_score_display(new_score: int):
 	if score_label:
 		score_label.text = "Total:\n$" + str(new_score)
-func _orders_match(order1: Array, order2: Array) -> bool:
+func _evaluate_order(target_order: Array, submitted_torta: Array):
+	# Calcualte price of ingredients in torta using INGREDIENTS dictionary
+	var total_price = 0
+	for ingredient in submitted_torta:
+		if ingredient in INGREDIENT_KEYS:
+			total_price += INGREDIENTS[ingredient].price
 	# Convert both arrays into dictionaries with ingredient counts
-	var count1 = _count_ingredients(order1)
-	var count2 = _count_ingredients(order2)
+	var count1 = _count_ingredients(target_order)
+	var count2 = _count_ingredients(submitted_torta)
+	if (count1 == count2):
+		score += total_price
+	else:
+		score -= total_price
+	_update_score_display(score)
+func _apply_penalty(trashed_torta: Array):
+	# Calculate penalty based on the number of ingredients in the torta
+	var penalty = 0
+	for ingredient in trashed_torta:
+		if ingredient in INGREDIENT_KEYS:
+			penalty += INGREDIENTS[ingredient].price
+	score -= penalty
+	_update_score_display(score)
 
-	return count1 == count2 # Check if the ingredient counts match
 
 func _count_ingredients(order: Array) -> Dictionary:
 	var count = {}
