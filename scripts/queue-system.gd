@@ -20,6 +20,7 @@ const INGREDIENT_SCALE = Vector2(0.08, 0.08)
 var score: int = 0
 var queues: Dictionary = {}
 var lane_nodes: Dictionary = {}
+var timeout_timer: Timer
 
 func _ready():
 	for i in range(lane_total):
@@ -34,9 +35,16 @@ func _ready():
 		queues[lane] = [] # Initialize lane queues
 	ingredient_menu.torta_submitted.connect(_on_torta_submitted)
 	ingredient_menu.torta_trashed.connect(_on_torta_trashed)
+	timeout_timer = Timer.new()
+	timeout_timer.wait_time = 1.0 # Check every second
+	timeout_timer.autostart = true
+	timeout_timer.timeout.connect(_check_client_timeouts)
+	add_child(timeout_timer)
 	_spawn_client() # Start the spawning cycle
+
 func _on_game_timer_timeout():
 	_show_final_score()
+
 func _show_final_score():
 	GameData.final_score = score
 	get_tree().change_scene_to_file("res://scenes/screens/score.tscn")
@@ -48,11 +56,13 @@ func _on_torta_submitted(torta: Array):
 		var expected_order = front_client.order
 		score += front_client.order_checker.call(expected_order, torta, front_client.tip_amount)
 		_update_score_display(score)
-		dismiss_client(closest_lane)
+		dismiss_client_from_lane(closest_lane, 0)
 	else:
 		_apply_penalty(torta)
+
 func _on_torta_trashed(torta: Array):
 	_apply_penalty(torta)
+
 func _update_score_display(new_score: int):
 	if score_label:
 		score_label.text = "Total:\n$" + str(new_score)
@@ -65,7 +75,6 @@ func _apply_penalty(trashed_torta: Array):
 			penalty += INGREDIENTS[ingredient].price
 	score -= penalty
 	_update_score_display(score)
-
 
 func _count_ingredients(order: Array) -> Dictionary:
 	var count = {}
@@ -135,7 +144,6 @@ func _update_order_display(lane: int):
 			ingredient_sprite.position = Vector2(x_pos, y_pos)
 			order_container.add_child(ingredient_sprite)
 
-
 func _spawn_client():
 	# Find available lanes
 	var available_lanes = []
@@ -149,11 +157,17 @@ func _spawn_client():
 		var queue = queues[lane]
 		var client = client_scene.instantiate()
 		var client_type = GameData.clients[GameData.clients.keys()[randi() % GameData.clients.size()]]
+
+		# Set client properties
 		client.position = Vector2(lane, spawn_area_y - (queue.size() * CLIENT_VERTICAL_SPACING))
 		var client_order = GameData.get_random_order(client_type.ingredient_preferences, client_type.order_min, client_type.order_max)
 		client.set_order(client_order)
 		client.set_checker(client_type.order_evaluation)
 		client.set_tip(client_type.tip_amount)
+		client.set_max_wait_time(client_type.wait_time) # wait_time is in seconds
+		client.set_spawn_time(Time.get_ticks_msec() / 1000.0) # Record spawn time
+
+		# Set visual properties
 		var sprite = client.get_node("ClientSprite")
 		sprite.texture = client_type.texture
 		var darkness_factor = 1.0 - (queue.size() * CLIENT_DARKNESS_FACTOR)
@@ -162,31 +176,31 @@ func _spawn_client():
 		add_child(client)
 		move_child(client, 0)
 		queue.append(client)
-
-		# Update order display
 		_update_order_display(lane)
 
-	# Always schedule next spawn attempt, regardless of whether we spawned this time
+	# Schedule next spawn
 	await get_tree().create_timer(randf_range(1, 4)).timeout
 	_spawn_client()
 
-func dismiss_client(lane: int):
+# Modified to handle dismissing any client from any position in the queue
+func dismiss_client_from_lane(lane: int, index: int):
 	var queue = queues[lane]
-	if queue.size() > 0:
-		var client = queue.pop_front()
+	if index >= 0 and index < queue.size():
+		var client = queue[index]
 		client.queue_free()
+		queue.remove_at(index)
 
-		# Move remaining clients up and update their shading
-		for i in range(queue.size()):
+		# Reposition remaining clients in the lane
+		for i in range(index, queue.size()):
 			var remaining_client = queue[i]
 			remaining_client.position.y += CLIENT_VERTICAL_SPACING
 
-			# Recalculate darkness
+			# Update darkness factor based on new position
 			var sprite = remaining_client.get_node("ClientSprite")
 			var darkness_factor = 1.0 - (i * CLIENT_DARKNESS_FACTOR)
 			sprite.modulate = Color(darkness_factor, darkness_factor, darkness_factor)
 
-		# Update order display (will clear if lane is now empty)
+		# Update order display (will show new front client or clear if empty)
 		_update_order_display(lane)
 
 func _get_closest_lane(player_x: float) -> int:
@@ -198,3 +212,16 @@ func _get_closest_lane(player_x: float) -> int:
 			closest_lane = lane
 			min_distance = distance
 	return closest_lane
+
+
+
+func _check_client_timeouts():
+	var current_time = Time.get_ticks_msec() / 1000.0 # Current time in seconds
+
+	for lane in lanes:
+		var queue = queues[lane]
+		# Iterate backwards to safely remove elements
+		for i in range(queue.size() - 1, -1, -1):
+			var client = queue[i]
+			if client.get_remaining_time(current_time) <= 0:
+				dismiss_client_from_lane(lane, i)
