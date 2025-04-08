@@ -1,26 +1,33 @@
 extends Node2D
-@onready var ingredient_menu = $"../IngredientsMenu"
+
 @export var lane_total = 5
 @export var lanes: Array[int] = []
 @export var client_scene: PackedScene = preload("res://scenes/client.tscn")
 @export var spawn_area_y: int = 620
 @export var max_clients_per_lane: int = 3
-@export var player: CharacterBody2D
 
+@onready var player: CharacterBody2D = get_node("../MiggyPiggy")
+@onready var ingredient_menu = $"../IngredientsMenu"
 @onready var game_timer = $"../GameTimer"
 @onready var score_label = $"../Score"
-var score: int = 0
 
+const BUBBLE_TEXTURE = preload("res://assets/game-ui/bubble.svg")
+const CLIENT_VERTICAL_SPACING = 180
+const CLIENT_DARKNESS_FACTOR = 0.2
+const INGREDIENT_SCALE = Vector2(0.08, 0.08)
+var score: int = 0
 var queues: Dictionary = {}
+var lane_nodes: Dictionary = {}
 
 func _ready():
 	for i in range(lane_total):
-		var lane_node = get_node("../OrderLanes/Lane" + str(i + 1))
+		var lane_node_path = "../OrderLanes/Lane" + str(i + 1)
+		var lane_node = get_node(lane_node_path)
 		lanes.append(int(lane_node.global_position.x))
+		lane_nodes[lanes[i]] = lane_node
 	_update_score_display(score)
 	game_timer.timeout.connect(_on_game_timer_timeout)
 	game_timer.start()
-	player = get_node("../MiggyPiggy")
 	for lane in lanes:
 		queues[lane] = [] # Initialize lane queues
 	ingredient_menu.torta_submitted.connect(_on_torta_submitted)
@@ -68,15 +75,16 @@ func _update_order_display(lane: int):
 	if lane_index == -1:
 		return
 
-	var lane_node = get_node("../OrderLanes/Lane" + str(lane_index + 1))
+	var lane_node = lane_nodes.get(lane)
+	var queue = queues[lane]
 
 	# Clear existing order display
 	for child in lane_node.get_children():
 		child.queue_free()
 
 	# Only display if there are clients in the lane
-	if queues[lane].size() > 0:
-		var front_client = queues[lane][0]
+	if queue.size() > 0:
+		var front_client = queue[0]
 		var order = front_client.order
 		var ingredient_count = order.size()
 
@@ -86,7 +94,7 @@ func _update_order_display(lane: int):
 
 		# Create and add the bubble background sprite
 		var bubble_sprite = Sprite2D.new()
-		bubble_sprite.texture = preload("res://assets/game-ui/bubble.svg")
+		bubble_sprite.texture = BUBBLE_TEXTURE
 		order_container.add_child(bubble_sprite)
 
 		# Calculate dynamic positioning
@@ -110,7 +118,7 @@ func _update_order_display(lane: int):
 		for i in range(ingredient_count):
 			var ingredient_sprite = Sprite2D.new()
 			ingredient_sprite.texture = order[i]
-			ingredient_sprite.scale = Vector2(0.08, 0.08)
+			ingredient_sprite.scale = INGREDIENT_SCALE
 
 			# Calculate position in grid
 			var col = i % columns
@@ -132,19 +140,20 @@ func _spawn_client():
 	if available_lanes.size() > 0:
 		# Spawn in a random available lane
 		var lane = available_lanes[randi() % available_lanes.size()]
+		var queue = queues[lane]
 		var client = client_scene.instantiate()
-		client.position = Vector2(lane, spawn_area_y - (queues[lane].size() * 180))
+		client.position = Vector2(lane, spawn_area_y - (queue.size() * CLIENT_VERTICAL_SPACING))
 		client.set_order(GameData.get_random_order())
 
 		var random_texture = GameData.clients[randi() % GameData.clients.size()]
 		var sprite = client.get_node("ClientSprite")
 		sprite.texture = random_texture
-		var darkness_factor = 1.0 - (queues[lane].size() * 0.2)
+		var darkness_factor = 1.0 - (queue.size() * CLIENT_DARKNESS_FACTOR)
 		sprite.modulate = Color(darkness_factor, darkness_factor, darkness_factor)
 
 		add_child(client)
-		client.get_parent().move_child(client, 0)
-		queues[lane].append(client)
+		move_child(client, 0)
+		queue.append(client)
 
 		# Update order display
 		_update_order_display(lane)
@@ -154,18 +163,19 @@ func _spawn_client():
 	_spawn_client()
 
 func dismiss_client(lane: int):
-	if queues[lane].size() > 0:
-		var client = queues[lane].pop_front()
+	var queue = queues[lane]
+	if queue.size() > 0:
+		var client = queue.pop_front()
 		client.queue_free()
 
 		# Move remaining clients up and update their shading
-		for i in range(queues[lane].size()):
-			var remaining_client = queues[lane][i]
-			remaining_client.position.y += 180
+		for i in range(queue.size()):
+			var remaining_client = queue[i]
+			remaining_client.position.y += CLIENT_VERTICAL_SPACING
 
 			# Recalculate darkness
 			var sprite = remaining_client.get_node("ClientSprite")
-			var darkness_factor = 1.0 - (i * 0.2)
+			var darkness_factor = 1.0 - (i * CLIENT_DARKNESS_FACTOR)
 			sprite.modulate = Color(darkness_factor, darkness_factor, darkness_factor)
 
 		# Update order display (will clear if lane is now empty)

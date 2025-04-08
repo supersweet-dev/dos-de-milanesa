@@ -87,7 +87,7 @@ position = Vector2(264, 0)
 position = Vector2(528, 0)
 
 [node name="MiggyPiggy" parent="." instance=ExtResource("1_kauht")]
-position = Vector2(430, 1061)
+position = Vector2(438, 1029)
 
 [node name="Score" type="Label" parent="."]
 offset_left = 1722.0
