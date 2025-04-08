@@ -133,7 +133,7 @@ func _spawn_client():
 		# Spawn in a random available lane
 		var lane = available_lanes[randi() % available_lanes.size()]
 		var client = client_scene.instantiate()
-		client.position = Vector2(lane-8, spawn_area_y - (queues[lane].size() * 180))
+		client.position = Vector2(lane, spawn_area_y - (queues[lane].size() * 180))
 		client.set_order(GameData.get_random_order())
 
 		var random_texture = GameData.clients[randi() % GameData.clients.size()]
