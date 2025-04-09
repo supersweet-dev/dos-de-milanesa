@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://deytbm3kyu5oo"]
+[gd_scene load_steps=16 format=3 uid="uid://deytbm3kyu5oo"]
 
 [ext_resource type="Texture2D" uid="uid://bh65x0sqwcqj" path="res://assets/sets/floor.png" id="1_e0wmo"]
 [ext_resource type="PackedScene" uid="uid://i51w8muep7jl" path="res://scenes/player.tscn" id="1_kauht"]
@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://np5njfjmdrex" path="res://assets/sets/counter.png" id="9_yruvw"]
 [ext_resource type="Texture2D" uid="uid://cwamwhi66m7mi" path="res://assets/sets/walls.png" id="11_xrk1x"]
 [ext_resource type="Texture2D" uid="uid://b6033gv7xbphe" path="res://assets/sets/flare.png" id="12_oni8f"]
+[ext_resource type="Texture2D" uid="uid://g0ite8b3q3uw" path="res://assets/game-ui/timer-texture.svg" id="13_oni8f"]
+[ext_resource type="Texture2D" uid="uid://g5b4h1a7gf7q" path="res://assets/game-ui/timer-bg.png" id="13_xrk1x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_80nbo"]
 size = Vector2(300, 1080)
@@ -98,9 +100,23 @@ scale = Vector2(2.29808, 2.22637)
 text = "???"
 metadata/_edit_use_anchors_ = true
 
+[node name="TimerBackground" type="Sprite2D" parent="."]
+texture = ExtResource("13_xrk1x")
+centered = false
+
 [node name="GameTimer" type="Timer" parent="."]
 wait_time = 180.0
 one_shot = true
+
+[node name="TimerPie" type="TextureProgressBar" parent="GameTimer"]
+offset_left = 73.0
+offset_top = 97.0
+offset_right = 223.0
+offset_bottom = 247.0
+max_value = 180.0
+value = 180.0
+fill_mode = 5
+texture_progress = ExtResource("13_oni8f")
 
 [node name="BackgroundMusic" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("8_s3n12")

@@ -9,7 +9,10 @@ extends Node2D
 @onready var player: CharacterBody2D = get_node("../MiggyPiggy")
 @onready var ingredient_menu = $"../IngredientsMenu"
 @onready var game_timer = $"../GameTimer"
+@onready var timer_pie = $"../GameTimer/TimerPie"
 @onready var score_label = $"../Score"
+
+const TIME_LIMIT = 180
 
 const ENABLED_CLIENTS = {
 	"cat": {"weight": 5},
@@ -43,6 +46,9 @@ func _ready():
 		lanes.append(int(lane_node.global_position.x))
 		lane_nodes[lanes[i]] = lane_node
 	_update_score_display(score)
+	game_timer.wait_time = TIME_LIMIT
+	timer_pie.max_value = TIME_LIMIT
+	timer_pie.value = TIME_LIMIT
 	game_timer.timeout.connect(_on_game_timer_timeout)
 	game_timer.start()
 	for lane in lanes:
@@ -242,3 +248,7 @@ func _check_client_timeouts():
 			client.update_mood(current_time) # Update mood state
 			if client.get_remaining_time(current_time) <= 0:
 				dismiss_client_from_lane(lane, i)
+
+func _process(_delta):
+	if game_timer and timer_pie:
+		timer_pie.value = game_timer.time_left
