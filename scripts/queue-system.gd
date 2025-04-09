@@ -11,6 +11,14 @@ extends Node2D
 @onready var game_timer = $"../GameTimer"
 @onready var score_label = $"../Score"
 
+const ENABLED_CLIENTS = {
+	"cat": {"weight": 5},
+	"chameleon": {"weight": 3},
+	"mammoth": {"weight": 1},
+	"xolo": {"weight": 2}
+	}
+var client_pool = []
+
 const INGREDIENTS = GameData.ingredients
 var INGREDIENT_KEYS = GameData.ingredients.keys()
 const BUBBLE_TEXTURE = preload("res://assets/game-ui/bubble.svg")
@@ -21,8 +29,14 @@ var score: int = 0
 var queues: Dictionary = {}
 var lane_nodes: Dictionary = {}
 var timeout_timer: Timer
-
+func _build_client_pool():
+	client_pool.clear()
+	for client_key in ENABLED_CLIENTS.keys():
+		for i in range(ENABLED_CLIENTS[client_key].weight):
+			client_pool.append(client_key)
+	client_pool.shuffle()
 func _ready():
+	_build_client_pool()
 	for i in range(lane_total):
 		var lane_node_path = "../OrderLanes/Lane" + str(i + 1)
 		var lane_node = get_node(lane_node_path)
@@ -144,6 +158,9 @@ func _update_order_display(lane: int):
 			ingredient_sprite.position = Vector2(x_pos, y_pos)
 			order_container.add_child(ingredient_sprite)
 
+func get_weighted_client_key() -> String:
+	return client_pool[randi() % client_pool.size()] if client_pool.size() > 0 else "cat"
+
 func _spawn_client():
 	# Find available lanes
 	var available_lanes = []
@@ -156,7 +173,7 @@ func _spawn_client():
 		var lane = available_lanes[randi() % available_lanes.size()]
 		var queue = queues[lane]
 		var client = client_scene.instantiate()
-		var client_type = GameData.clients[GameData.clients.keys()[randi() % GameData.clients.size()]]
+		var client_type = GameData.clients[get_weighted_client_key()]
 
 		# Set client properties
 		client.position = Vector2(lane, spawn_area_y - (queue.size() * CLIENT_VERTICAL_SPACING))
