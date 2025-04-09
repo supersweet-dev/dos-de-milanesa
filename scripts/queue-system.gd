@@ -165,7 +165,9 @@ func _spawn_client():
 		client.set_checker(client_type.order_evaluation)
 		client.set_tip(client_type.tip_amount)
 		client.set_max_wait_time(client_type.wait_time) # wait_time is in seconds
-		client.set_spawn_time(Time.get_ticks_msec() / 1000.0) # Record spawn time
+		client.set_spawn_time(Time.get_ticks_msec() / 1000.0)
+		var new_y = spawn_area_y - (queue.size() * CLIENT_VERTICAL_SPACING)
+		client.update_base_position(Vector2(lane, new_y))
 
 		# Set visual properties
 		var sprite = client.get_node("ClientSprite")
@@ -190,17 +192,16 @@ func dismiss_client_from_lane(lane: int, index: int):
 		client.queue_free()
 		queue.remove_at(index)
 
-		# Reposition remaining clients in the lane
-		for i in range(index, queue.size()):
-			var remaining_client = queue[i]
-			remaining_client.position.y += CLIENT_VERTICAL_SPACING
+		# Reposition remaining clients
+		for i in range(queue.size()):
+			var new_y = spawn_area_y - (i * CLIENT_VERTICAL_SPACING)
+			queue[i].update_base_position(Vector2(lane, new_y))
 
-			# Update darkness factor based on new position
-			var sprite = remaining_client.get_node("ClientSprite")
+			# Update darkness factor
+			var sprite = queue[i].get_node("ClientSprite")
 			var darkness_factor = 1.0 - (i * CLIENT_DARKNESS_FACTOR)
 			sprite.modulate = Color(darkness_factor, darkness_factor, darkness_factor)
 
-		# Update order display (will show new front client or clear if empty)
 		_update_order_display(lane)
 
 func _get_closest_lane(player_x: float) -> int:
@@ -214,14 +215,13 @@ func _get_closest_lane(player_x: float) -> int:
 	return closest_lane
 
 
-
 func _check_client_timeouts():
-	var current_time = Time.get_ticks_msec() / 1000.0 # Current time in seconds
+	var current_time = Time.get_ticks_msec() / 1000.0
 
 	for lane in lanes:
 		var queue = queues[lane]
-		# Iterate backwards to safely remove elements
 		for i in range(queue.size() - 1, -1, -1):
 			var client = queue[i]
+			client.update_mood(current_time) # Update mood state
 			if client.get_remaining_time(current_time) <= 0:
 				dismiss_client_from_lane(lane, i)
