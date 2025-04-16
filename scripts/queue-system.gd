@@ -203,10 +203,24 @@ func _spawn_client():
 		queue.append(client)
 		_update_order_display(lane)
 
-	# Schedule next spawn
-	await get_tree().create_timer(randf_range(1, 4)).timeout
-	_spawn_client()
+	# Calculate next spawn time based on game progress
+	var time_remaining_ratio = game_timer.time_left / TIME_LIMIT
+	var spawn_interval: float
+	var spawn_variation: float
 
+	if time_remaining_ratio <= TIME_LIMIT * 0.25:
+		spawn_interval = Globals.SPAWN_INTERVAL * 0.25
+		spawn_variation = Globals.SPAWN_VARIATION * 0.25
+	elif time_remaining_ratio <= TIME_LIMIT * 0.5:
+		spawn_interval = Globals.SPAWN_INTERVAL * 0.5
+		spawn_variation = Globals.SPAWN_VARIATION * 0.5
+	else:
+		spawn_interval = Globals.SPAWN_INTERVAL
+		spawn_variation = Globals.SPAWN_VARIATION
+
+	# Schedule next spawn with random variation
+	await get_tree().create_timer(randf_range(spawn_interval - spawn_variation, spawn_interval + spawn_variation)).timeout
+	_spawn_client()
 # Modified to handle dismissing any client from any position in the queue
 func dismiss_client_from_lane(lane: int, index: int):
 	var queue = queues[lane]
