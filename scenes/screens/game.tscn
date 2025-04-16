@@ -100,15 +100,17 @@ scale = Vector2(2.29808, 2.22637)
 text = "???"
 metadata/_edit_use_anchors_ = true
 
-[node name="TimerBackground" type="Sprite2D" parent="."]
+[node name="RoundTimer" type="Node2D" parent="."]
+
+[node name="TimerBackground" type="Sprite2D" parent="RoundTimer"]
 texture = ExtResource("13_xrk1x")
 centered = false
 
-[node name="GameTimer" type="Timer" parent="."]
+[node name="GameTimer" type="Timer" parent="RoundTimer"]
 wait_time = 180.0
 one_shot = true
 
-[node name="TimerPie" type="TextureProgressBar" parent="GameTimer"]
+[node name="TimerPie" type="TextureProgressBar" parent="RoundTimer/GameTimer"]
 offset_left = 73.0
 offset_top = 97.0
 offset_right = 223.0

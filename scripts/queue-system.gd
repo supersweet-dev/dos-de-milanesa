@@ -8,8 +8,9 @@ extends Node2D
 
 @onready var player: CharacterBody2D = get_node("../MiggyPiggy")
 @onready var ingredient_menu = $"../IngredientsMenu"
-@onready var game_timer = $"../GameTimer"
-@onready var timer_pie = $"../GameTimer/TimerPie"
+@onready var game_timer_container = $"../RoundTimer"
+@onready var game_timer = $"../RoundTimer/GameTimer"
+@onready var timer_pie = $"../RoundTimer/GameTimer/TimerPie"
 @onready var score_label = $"../Score"
 
 var TIME_LIMIT = Globals.TIME_LIMIT
@@ -29,6 +30,9 @@ var CLIENT_VERTICAL_SPACING = Globals.CLIENT_VERTICAL_SPACING
 var CLIENT_DARKNESS_FACTOR = Globals.CLIENT_DARKNESS_FACTOR
 var INGREDIENT_SCALE = Globals.INGREDIENT_SCALE
 var score: int = 0
+var starting_timer_position = 0.0
+var timer_shake_timer: float = 0.0
+var timer_shake_intensity: float = Globals.TIMER_SHAKE_HURRY
 var queues: Dictionary = {}
 var lane_nodes: Dictionary = {}
 var timeout_timer: Timer
@@ -39,6 +43,7 @@ func _build_client_pool():
 			client_pool.append(client_key)
 	client_pool.shuffle()
 func _ready():
+	starting_timer_position = game_timer_container.position.y
 	_build_client_pool()
 	for i in range(lane_total):
 		var lane_node_path = "../OrderLanes/Lane" + str(i + 1)
@@ -262,6 +267,22 @@ func _check_client_timeouts():
 			if client.get_remaining_time(current_time) <= 0:
 				dismiss_client_from_lane(lane, i)
 
-func _process(_delta):
+func _process(delta):
 	if game_timer and timer_pie:
 		timer_pie.value = game_timer.time_left
+
+		# Shaking logic
+		var remaining_time = game_timer.time_left
+		var time_ratio = remaining_time / TIME_LIMIT
+
+		if time_ratio <= 0.25:
+			timer_shake_timer += delta
+			var shake_intensity = timer_shake_intensity
+			timer_pie.modulate = Color(1, 0.7, 0.8) # Light pink
+			if time_ratio <= 0.10:
+				shake_intensity *= 2.0
+				timer_pie.modulate = Color(0.8, 0.4, 0.4) # Saturated red
+			var shake_offset = Vector2(randf_range(-shake_intensity, shake_intensity), randf_range(-shake_intensity, shake_intensity))
+			game_timer_container.position.y = starting_timer_position + shake_offset.y
+		else:
+			game_timer_container.position.y = starting_timer_position

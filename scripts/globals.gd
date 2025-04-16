@@ -21,3 +21,4 @@ extends Node
 @export var PANIC_THRESHOLD: float = 0.75
 @export var PANIC_INTENSITY: float = 8.0
 @export var CALM_INTENSITY: float = 0.0
+@export var TIMER_SHAKE_HURRY: float = 5.0
