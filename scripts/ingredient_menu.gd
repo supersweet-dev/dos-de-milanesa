@@ -13,7 +13,7 @@ signal torta_trashed(torta: Array) # Declare signal
 
 var INGREDIENT_KEYS = GameData.ingredients.keys()
 const INGREDIENTS = GameData.ingredients
-const MAX_INGREDIENTS = 6 # Limit
+var MAX_INGREDIENTS = Globals.MAX_INGREDIENTS
 
 func _ready():
 	_update_display()

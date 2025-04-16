@@ -11,6 +11,11 @@ var current_mood: MoodState = MoodState.CALM
 var shake_intensity: float = 0.0
 var base_position: Vector2 # Tracks queue position without shake
 var shake_offset: Vector2 = Vector2.ZERO # Tracks current shake displacement
+var CALM_INTENSITY: float = Globals.CALM_INTENSITY
+var IMPATIENT_INTENSITY: float = Globals.IMPATIENT_INTENSITY
+var PANIC_INTENSITY: float = Globals.PANIC_INTENSITY
+var IMPATIENT_THRESHOLD: float = Globals.IMPATIENT_THRESHOLD
+var PANIC_THRESHOLD: float = Globals.PANIC_THRESHOLD
 
 func _ready():
 	# Set up shake timer
@@ -39,17 +44,17 @@ func update_mood(current_time: float):
 	var remaining = get_remaining_time(current_time)
 	var progress = 1.0 - (remaining / max_wait_time)
 
-	if progress >= 0.75: # Last quarter
+	if progress >= PANIC_THRESHOLD: # Last quarter
 		if current_mood != MoodState.PANIC:
 			current_mood = MoodState.PANIC
-			shake_intensity = 8.0
-	elif progress >= 0.5: # Second half
+			shake_intensity = PANIC_INTENSITY
+	elif progress >= IMPATIENT_THRESHOLD: # Second half
 		if current_mood != MoodState.IMPATIENT:
 			current_mood = MoodState.IMPATIENT
-			shake_intensity = 2.0
+			shake_intensity = IMPATIENT_INTENSITY
 	else:
 		current_mood = MoodState.CALM
-		shake_intensity = 0.0
+		shake_intensity = CALM_INTENSITY
 		shake_offset = Vector2.ZERO
 		_apply_position()
 

@@ -1,9 +1,9 @@
 extends CharacterBody2D
 
-@export var max_speed: float = 1400.0
-@export var accel: float = 6000.0
-@export var friction: float = 600.0
-@export var bounce_damp: float = 0.8  # 0 = full reversal, 1 = no bounce
+@export var max_speed: float = Globals.MAX_SPEED
+@export var accel: float = Globals.ACCEL
+@export var friction: float = Globals.FRICTION
+@export var bounce_damp: float = Globals.BOUNCE_DAMP # 0 = full reversal, 1 = no bounce
 
 var previous_velocity := Vector2.ZERO
 
@@ -38,4 +38,4 @@ func _physics_process(delta: float):
 		if abs(collision.get_normal().x) > 0.9:
 			# Bounce in X direction based on speed and damp factor
 			var impact_speed = previous_velocity.x
-			velocity.x = -impact_speed * (1.0 - bounce_damp)
+			velocity.x = - impact_speed * (1.0 - bounce_damp)

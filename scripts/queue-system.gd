@@ -1,10 +1,10 @@
 extends Node2D
 
-@export var lane_total = 5
+@export var lane_total = Globals.LANE_TOTAL
 @export var lanes: Array[int] = []
 @export var client_scene: PackedScene = preload("res://scenes/client.tscn")
-@export var spawn_area_y: int = 620
-@export var max_clients_per_lane: int = 3
+@export var spawn_area_y: int = Globals.CLIENT_SPAWN_AREA_Y
+@export var max_clients_per_lane: int = Globals.MAX_CLIENTS_PER_LANE
 
 @onready var player: CharacterBody2D = get_node("../MiggyPiggy")
 @onready var ingredient_menu = $"../IngredientsMenu"
@@ -12,7 +12,7 @@ extends Node2D
 @onready var timer_pie = $"../GameTimer/TimerPie"
 @onready var score_label = $"../Score"
 
-const TIME_LIMIT = 180
+var TIME_LIMIT = Globals.TIME_LIMIT
 
 const ENABLED_CLIENTS = {
 	"cat": {"weight": 5},
@@ -24,10 +24,10 @@ var client_pool = []
 
 const INGREDIENTS = GameData.ingredients
 var INGREDIENT_KEYS = GameData.ingredients.keys()
-const BUBBLE_TEXTURE = preload("res://assets/game-ui/bubble.svg")
-const CLIENT_VERTICAL_SPACING = 180
-const CLIENT_DARKNESS_FACTOR = 0.2
-const INGREDIENT_SCALE = Vector2(0.08, 0.08)
+var BUBBLE_TEXTURE = Globals.BUBBLE_TEXTURE
+var CLIENT_VERTICAL_SPACING = Globals.CLIENT_VERTICAL_SPACING
+var CLIENT_DARKNESS_FACTOR = Globals.CLIENT_DARKNESS_FACTOR
+var INGREDIENT_SCALE = Globals.INGREDIENT_SCALE
 var score: int = 0
 var queues: Dictionary = {}
 var lane_nodes: Dictionary = {}
