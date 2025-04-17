@@ -6,12 +6,13 @@ extends Node2D
 @export var spawn_area_y: int = Globals.CLIENT_SPAWN_AREA_Y
 @export var max_clients_per_lane: int = Globals.MAX_CLIENTS_PER_LANE
 
-@onready var player: CharacterBody2D = get_node("../MiggyPiggy")
-@onready var ingredient_menu = $"../IngredientsMenu"
-@onready var game_timer_container = $"../RoundTimer"
-@onready var game_timer = $"../RoundTimer/GameTimer"
-@onready var timer_pie = $"../RoundTimer/GameTimer/TimerPie"
-@onready var score_label = $"../Score"
+@onready var player: CharacterBody2D = $MiggyPiggy
+@onready var sprite_queue = $Queue
+@onready var ingredient_menu = $IngredientsMenu
+@onready var game_timer_container = $RoundTimer
+@onready var game_timer = $RoundTimer/GameTimer
+@onready var timer_pie = $RoundTimer/GameTimer/TimerPie
+@onready var score_label = $Score
 
 var TIME_LIMIT = Globals.TIME_LIMIT
 
@@ -47,7 +48,7 @@ func _ready():
 	starting_timer_position = game_timer_container.position.y
 	_build_client_pool()
 	for i in range(lane_total):
-		var lane_node_path = "../OrderLanes/Lane" + str(i + 1)
+		var lane_node_path = "OrderLanes/Lane" + str(i + 1)
 		var lane_node = get_node(lane_node_path)
 		lanes.append(int(lane_node.global_position.x))
 		lane_nodes[lanes[i]] = lane_node
@@ -311,12 +312,13 @@ func _spawn_client():
 
 		# Set visual properties
 		var sprite = client.get_node("ClientSprite")
+		print(sprite)
 		sprite.texture = client_type.texture
 		var darkness_factor = 1.0 - (queue.size() * CLIENT_DARKNESS_FACTOR)
 		sprite.modulate = Color(darkness_factor, darkness_factor, darkness_factor)
 
-		add_child(client)
-		move_child(client, 0)
+		sprite_queue.add_child(client)
+		sprite_queue.move_child(client, 0)
 		queue.append(client)
 		_update_order_display(lane)
 

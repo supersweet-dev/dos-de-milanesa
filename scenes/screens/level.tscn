@@ -1,0 +1,128 @@
+[gd_scene load_steps=17 format=3 uid="uid://deytbm3kyu5oo"]
+
+[ext_resource type="Script" uid="uid://cycx44my7empk" path="res://scripts/level_controller.gd" id="1_lb4k8"]
+[ext_resource type="Texture2D" uid="uid://bh65x0sqwcqj" path="res://assets/sets/floor.png" id="2_lkchr"]
+[ext_resource type="Texture2D" uid="uid://cwamwhi66m7mi" path="res://assets/sets/walls.png" id="3_xydpy"]
+[ext_resource type="Texture2D" uid="uid://b6033gv7xbphe" path="res://assets/sets/flare.png" id="4_5fk06"]
+[ext_resource type="PackedScene" uid="uid://b3a21rr1hs8xn" path="res://scenes/queue.tscn" id="5_f1jnl"]
+[ext_resource type="Texture2D" uid="uid://np5njfjmdrex" path="res://assets/sets/counter.png" id="6_je5y7"]
+[ext_resource type="PackedScene" uid="uid://c7jmnjwyek2rk" path="res://scenes/ingredient_menu.tscn" id="7_v4gx6"]
+[ext_resource type="Texture2D" uid="uid://bdpt0g0s5nk46" path="res://assets/game-ui/torta-shell-bot.svg" id="8_8y8pw"]
+[ext_resource type="Texture2D" uid="uid://bihuud7sn7ta" path="res://assets/game-ui/ingredient-frame.svg" id="9_r7jjm"]
+[ext_resource type="Texture2D" uid="uid://ckxfmkydoed6b" path="res://assets/game-ui/torta-shell-top.svg" id="10_b6m2l"]
+[ext_resource type="Script" uid="uid://cfm1k00kkoese" path="res://scripts/order_lanes.gd" id="11_a8xar"]
+[ext_resource type="PackedScene" uid="uid://i51w8muep7jl" path="res://scenes/player.tscn" id="12_dhkr1"]
+[ext_resource type="Texture2D" uid="uid://g5b4h1a7gf7q" path="res://assets/game-ui/timer-bg.png" id="13_0om85"]
+[ext_resource type="Texture2D" uid="uid://g0ite8b3q3uw" path="res://assets/game-ui/timer-texture.svg" id="14_louwm"]
+[ext_resource type="AudioStream" uid="uid://c10kpnphnumkh" path="res://assets/sounds/music/main-theme.mp3" id="15_ma8ce"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_80nbo"]
+size = Vector2(300, 1080)
+
+[node name="Level" type="Node2D"]
+script = ExtResource("1_lb4k8")
+
+[node name="Floor" type="Sprite2D" parent="."]
+texture = ExtResource("2_lkchr")
+centered = false
+
+[node name="Walls" type="Sprite2D" parent="."]
+texture = ExtResource("3_xydpy")
+centered = false
+
+[node name="Flare" type="Sprite2D" parent="Walls"]
+texture = ExtResource("4_5fk06")
+centered = false
+
+[node name="WallCollisions" type="StaticBody2D" parent="Walls"]
+
+[node name="WallLeft" type="CollisionShape2D" parent="Walls/WallCollisions"]
+position = Vector2(150, 540)
+shape = SubResource("RectangleShape2D_80nbo")
+
+[node name="WallRight" type="CollisionShape2D" parent="Walls/WallCollisions"]
+position = Vector2(1770, 540)
+shape = SubResource("RectangleShape2D_80nbo")
+
+[node name="Queue" parent="." instance=ExtResource("5_f1jnl")]
+script = null
+
+[node name="Counter" type="Sprite2D" parent="Queue"]
+texture = ExtResource("6_je5y7")
+centered = false
+
+[node name="IngredientsMenu" parent="." instance=ExtResource("7_v4gx6")]
+position = Vector2(148.2, 603)
+scale = Vector2(0.6, 0.6)
+
+[node name="Torta-shell-bot" type="Sprite2D" parent="."]
+position = Vector2(1769, 765)
+scale = Vector2(1.8, 1.8)
+texture = ExtResource("8_8y8pw")
+
+[node name="TortaContainer" type="Node2D" parent="."]
+position = Vector2(1771, 534)
+
+[node name="IngredientFrame" type="Sprite2D" parent="."]
+position = Vector2(148.2, 603)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("9_r7jjm")
+
+[node name="Torta-shell-top" type="Sprite2D" parent="."]
+position = Vector2(1766, 480)
+scale = Vector2(1.8, 1.8)
+texture = ExtResource("10_b6m2l")
+
+[node name="OrderLanes" type="Node2D" parent="."]
+position = Vector2(960, 615)
+script = ExtResource("11_a8xar")
+
+[node name="Lane1" type="Node2D" parent="OrderLanes"]
+position = Vector2(-528, 0)
+
+[node name="Lane2" type="Node2D" parent="OrderLanes"]
+position = Vector2(-264, 0)
+
+[node name="Lane3" type="Node2D" parent="OrderLanes"]
+
+[node name="Lane4" type="Node2D" parent="OrderLanes"]
+position = Vector2(264, 0)
+
+[node name="Lane5" type="Node2D" parent="OrderLanes"]
+position = Vector2(528, 0)
+
+[node name="MiggyPiggy" parent="." instance=ExtResource("12_dhkr1")]
+position = Vector2(438, 1029)
+
+[node name="Score" type="Label" parent="."]
+offset_left = 1722.0
+offset_top = 176.0
+offset_right = 1760.0
+offset_bottom = 215.0
+scale = Vector2(2.29808, 2.22637)
+text = "???"
+metadata/_edit_use_anchors_ = true
+
+[node name="RoundTimer" type="Node2D" parent="."]
+
+[node name="TimerBackground" type="Sprite2D" parent="RoundTimer"]
+texture = ExtResource("13_0om85")
+centered = false
+
+[node name="GameTimer" type="Timer" parent="RoundTimer"]
+wait_time = 180.0
+one_shot = true
+
+[node name="TimerPie" type="TextureProgressBar" parent="RoundTimer/GameTimer"]
+offset_left = 73.0
+offset_top = 97.0
+offset_right = 223.0
+offset_bottom = 247.0
+max_value = 180.0
+value = 180.0
+fill_mode = 5
+texture_progress = ExtResource("14_louwm")
+
+[node name="BackgroundMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("15_ma8ce")
+autoplay = true
