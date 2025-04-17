@@ -35,6 +35,7 @@ var timer_shake_timer: float = 0.0
 var timer_shake_intensity: float = Globals.TIMER_SHAKE_HURRY
 var queues: Dictionary = {}
 var lane_nodes: Dictionary = {}
+var locked_lanes := {}
 var timeout_timer: Timer
 func _build_client_pool():
 	client_pool.clear()
@@ -74,17 +75,61 @@ func _show_final_score():
 	GameData.final_score = score
 	get_tree().change_scene_to_file("res://scenes/screens/score.tscn")
 
+func client_delivery_animation(client: Node2D, order_score: int) -> void:
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.set_trans(Tween.TRANS_SINE)
+
+	var original_position = client.position
+
+	if order_score > 0:
+		# Hop animation (vertical bounce)
+		var hop_height = 20.0
+		var hop_time = 0.15
+
+		tween.tween_property(client, "position:y", original_position.y - hop_height, hop_time)
+		tween.tween_property(client, "position:y", original_position.y, hop_time)
+	else:
+		# Shake animation (horizontal wiggle)
+		var shake_amount = 10.0
+		var shake_time = 0.05
+
+		tween.tween_property(client, "position:x", original_position.x - shake_amount, shake_time)
+		tween.tween_property(client, "position:x", original_position.x + shake_amount, shake_time)
+		tween.tween_property(client, "position:x", original_position.x, shake_time)
+
+	await tween.finished
+
 func _on_torta_submitted(torta: Array):
 	var closest_lane = _get_closest_lane(player.position.x)
+	if locked_lanes.has(closest_lane):
+		return # Lane is locked, do not proceed
+
+	locked_lanes[closest_lane] = true
+
+	var unlock = func(): locked_lanes.erase(closest_lane)
+
 	if queues[closest_lane].size() > 0:
 		var front_client = queues[closest_lane][0]
 		var expected_order = front_client.order
-		score += front_client.order_checker.call(expected_order, torta, front_client.tip_amount)
+
+		var order_score = 0
+		if is_instance_valid(front_client):
+			order_score = front_client.order_checker.call(expected_order, torta, front_client.tip_amount)
+			score += order_score
+			# Animate only if still valid
+			if is_instance_valid(front_client):
+				await client_delivery_animation(front_client, order_score)
+
 		_update_score_display(score)
-		dismiss_client_from_lane(closest_lane, 0)
+
+		# Dismiss only if still in queue
+		if is_instance_valid(front_client) and queues[closest_lane].has(front_client):
+			dismiss_client_from_lane(closest_lane, 0)
 	else:
 		_apply_penalty(torta)
 
+	unlock.call()
 func _on_torta_trashed(torta: Array):
 	_apply_penalty(torta)
 
