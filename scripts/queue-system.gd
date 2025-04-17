@@ -82,15 +82,36 @@ func client_delivery_animation(client: Node2D, order_score: int) -> void:
 
 	var original_position = client.position
 
+	# === Score label setup ===
+	var client_score_label = Label.new()
+	client_score_label.text = ("+" if order_score >= 0 else "") + str(order_score)
+
+	# Set label colors with outline
+	var text_color = Color.GREEN if order_score > 0 else Color.RED
+	client_score_label.add_theme_color_override("font_color", text_color)
+	client_score_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	client_score_label.add_theme_constant_override("outline_size", 4)
+
+	client_score_label.position = Vector2(40, -240)
+	client_score_label.z_index = 100
+
+	# Make label more visible
+	var font = client_score_label.get_theme_default_font()
+	if font:
+		client_score_label.add_theme_font_override("font", font)
+	client_score_label.add_theme_font_size_override("font_size", 24)
+
+	client.add_child(client_score_label)
+	client_score_label.visible = true
+
+	# === Animation for both client and label ===
 	if order_score > 0:
-		# Hop animation (vertical bounce)
 		var hop_height = 20.0
 		var hop_time = 0.15
 
 		tween.tween_property(client, "position:y", original_position.y - hop_height, hop_time)
 		tween.tween_property(client, "position:y", original_position.y, hop_time)
 	else:
-		# Shake animation (horizontal wiggle)
 		var shake_amount = 10.0
 		var shake_time = 0.05
 
@@ -98,7 +119,18 @@ func client_delivery_animation(client: Node2D, order_score: int) -> void:
 		tween.tween_property(client, "position:x", original_position.x + shake_amount, shake_time)
 		tween.tween_property(client, "position:x", original_position.x, shake_time)
 
+	# Add combined animations
+	tween.parallel().tween_property(client_score_label, "position:y", client_score_label.position.y - 30, 0.3)
+	tween.parallel().tween_property(client_score_label, "modulate:a", 0.0, 0.3).set_delay(0.1)
+
+	# Add client fade out
+	tween.parallel().tween_property(client, "modulate:a", 0.0, 0.3).set_delay(0.1)
+
 	await tween.finished
+
+	# Clean up
+	client_score_label.queue_free()
+
 
 func _on_torta_submitted(torta: Array):
 	var closest_lane = _get_closest_lane(player.position.x)
@@ -145,6 +177,41 @@ func _apply_penalty(trashed_torta: Array):
 			penalty += INGREDIENTS[ingredient].price
 	score -= penalty
 	_update_score_display(score)
+
+	# Show penalty feedback on player
+	_show_penalty_feedback(penalty)
+
+func _show_penalty_feedback(penalty: int):
+	if penalty == 0: return
+	var penalty_label = Label.new()
+	penalty_label.text = "-$%d" % penalty
+	penalty_label.modulate = Color.RED
+	penalty_label.z_index = 100
+
+	# Add black outline for visibility
+	penalty_label.add_theme_color_override("font_color", Color.RED)
+	penalty_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	penalty_label.add_theme_constant_override("outline_size", 4)
+
+	# Position above player's head
+	penalty_label.position = Vector2(60, -246) # Adjust these values as needed
+
+	# Make label visible
+	var font = penalty_label.get_theme_default_font()
+	if font:
+		penalty_label.add_theme_font_override("font", font)
+	penalty_label.add_theme_font_size_override("font_size", 24)
+
+	player.add_child(penalty_label)
+
+	# Animate the label
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(penalty_label, "position:y", penalty_label.position.y - 30, 0.3)
+	tween.tween_property(penalty_label, "modulate:a", 0.0, 0.3)
+
+	await tween.finished
+	penalty_label.queue_free()
 
 func _count_ingredients(order: Array) -> Dictionary:
 	var count = {}
@@ -310,7 +377,14 @@ func _check_client_timeouts():
 			var client = queue[i]
 			client.update_mood(current_time) # Update mood state
 			if client.get_remaining_time(current_time) <= 0:
+				await _timeout_fade(client) # Wait for fade animation
 				dismiss_client_from_lane(lane, i)
+
+func _timeout_fade(client: Node2D) -> void:
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.tween_property(client, "modulate:a", 0.0, 0.2) # 0.3 second fade
+	await tween.finished
 
 func _process(delta):
 	if game_timer and timer_pie:
