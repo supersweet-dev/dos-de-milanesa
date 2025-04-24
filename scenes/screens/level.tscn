@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://deytbm3kyu5oo"]
+[gd_scene load_steps=19 format=3 uid="uid://deytbm3kyu5oo"]
 
 [ext_resource type="Script" uid="uid://cycx44my7empk" path="res://scripts/level_controller.gd" id="1_lb4k8"]
 [ext_resource type="Texture2D" uid="uid://bh65x0sqwcqj" path="res://assets/sets/floor.png" id="2_lkchr"]
@@ -13,6 +13,8 @@
 [ext_resource type="Script" uid="uid://cfm1k00kkoese" path="res://scripts/order_lanes.gd" id="11_a8xar"]
 [ext_resource type="PackedScene" uid="uid://i51w8muep7jl" path="res://scenes/player.tscn" id="12_dhkr1"]
 [ext_resource type="Texture2D" uid="uid://g5b4h1a7gf7q" path="res://assets/game-ui/timer-bg.png" id="13_0om85"]
+[ext_resource type="Texture2D" uid="uid://do5rlv1s0r04t" path="res://assets/game-ui/score-card.png" id="13_xydpy"]
+[ext_resource type="FontFile" uid="uid://c5nx5h3yh1gdu" path="res://assets/fonts/ComicNeue-BoldItalic.ttf" id="14_5fk06"]
 [ext_resource type="Texture2D" uid="uid://g0ite8b3q3uw" path="res://assets/game-ui/timer-texture.svg" id="14_louwm"]
 [ext_resource type="AudioStream" uid="uid://c10kpnphnumkh" path="res://assets/sounds/music/main-theme.mp3" id="15_ma8ce"]
 
@@ -94,13 +96,22 @@ position = Vector2(528, 0)
 [node name="MiggyPiggy" parent="." instance=ExtResource("12_dhkr1")]
 position = Vector2(438, 1029)
 
-[node name="Score" type="Label" parent="."]
-offset_left = 1722.0
-offset_top = 176.0
-offset_right = 1760.0
-offset_bottom = 215.0
-scale = Vector2(2.29808, 2.22637)
-text = "???"
+[node name="Score-card" type="Sprite2D" parent="."]
+texture = ExtResource("13_xydpy")
+centered = false
+
+[node name="Score" type="RichTextLabel" parent="."]
+offset_left = 1682.0
+offset_top = 165.0
+offset_right = 1842.0
+offset_bottom = 241.0
+theme_override_colors/default_color = Color(0.0200171, 0.278542, 0.506846, 1)
+theme_override_fonts/normal_font = ExtResource("14_5fk06")
+theme_override_font_sizes/normal_font_size = 55
+text = "$000"
+fit_content = true
+horizontal_alignment = 2
+vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="RoundTimer" type="Node2D" parent="."]

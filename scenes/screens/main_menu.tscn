@@ -1,13 +1,13 @@
 [gd_scene load_steps=3 format=3 uid="uid://chni70fyhbktl"]
 
 [ext_resource type="Script" uid="uid://biqb2txou787i" path="res://scripts/main_menu.gd" id="1_tgk1t"]
-[ext_resource type="Texture2D" uid="uid://d2agdu3lyumfi" path="res://assets/menus/title-screen.svg" id="2_idsrk"]
+[ext_resource type="Texture2D" uid="uid://cyttdda04osjn" path="res://assets/menus/title screen.png" id="2_tgk1t"]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_tgk1t")
 
 [node name="TitleScreen" type="Sprite2D" parent="."]
-texture = ExtResource("2_idsrk")
+texture = ExtResource("2_tgk1t")
 centered = false
 
 [node name="StartButton" type="Button" parent="."]

@@ -1,13 +1,13 @@
 [gd_scene load_steps=3 format=3 uid="uid://cege14q1ja50n"]
 
 [ext_resource type="Script" uid="uid://dd2h1u3oir7im" path="res://scripts/score.gd" id="1_wqdea"]
-[ext_resource type="Texture2D" uid="uid://cfdjcl6emas3k" path="res://assets/menus/score-screen.svg" id="2_l2rf0"]
+[ext_resource type="Texture2D" uid="uid://b08jpkj81piey" path="res://assets/menus/score-screen.png" id="2_wqdea"]
 
 [node name="Score" type="Node2D"]
 script = ExtResource("1_wqdea")
 
-[node name="Score-screen" type="Sprite2D" parent="."]
-texture = ExtResource("2_l2rf0")
+[node name="Score-screen2" type="Sprite2D" parent="."]
+texture = ExtResource("2_wqdea")
 centered = false
 
 [node name="ClosingText" type="Label" parent="."]

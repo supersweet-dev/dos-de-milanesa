@@ -150,11 +150,11 @@ func _on_torta_submitted(torta: Array):
 		if is_instance_valid(front_client):
 			order_score = front_client.order_checker.call(expected_order, torta, front_client.tip_amount)
 			score += order_score
+			_update_score_display(score)
 			# Animate only if still valid
 			if is_instance_valid(front_client):
 				await client_delivery_animation(front_client, order_score)
 
-		_update_score_display(score)
 
 		# Dismiss only if still in queue
 		if is_instance_valid(front_client) and queues[closest_lane].has(front_client):
@@ -168,7 +168,7 @@ func _on_torta_trashed(torta: Array):
 
 func _update_score_display(new_score: int):
 	if score_label:
-		score_label.text = "Total:\n$" + str(new_score)
+		score_label.text = "$" + str(new_score)
 
 func _apply_penalty(trashed_torta: Array):
 	# Calculate penalty based on the number of ingredients in the torta
