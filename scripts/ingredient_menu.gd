@@ -26,12 +26,15 @@ func _update_display():
 
 func _process(_delta):
 	if Input.is_action_just_pressed("ingredients_up"):
+		SoundManager.play("scroll_ingredient")
 		ingredient_index = (ingredient_index - 1) % INGREDIENT_KEYS.size()
 		_update_display()
 	elif Input.is_action_just_pressed("ingredients_down"):
+		SoundManager.play("scroll_ingredient")
 		ingredient_index = (ingredient_index + 1) % INGREDIENT_KEYS.size()
 		_update_display()
 	elif Input.is_action_just_pressed("ingredients_add"):
+		SoundManager.play("select_ingredient")
 		_add_ingredient_to_torta(INGREDIENT_KEYS[ingredient_index])
 	elif Input.is_action_just_pressed("serve_order"):
 		_submit_torta()

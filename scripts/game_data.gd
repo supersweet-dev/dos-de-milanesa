@@ -41,7 +41,7 @@ const clients: Dictionary = {
 		"order_max": 4,
 		"tip_amount": 2,
 		"wait_time": 20,
-		"order_evaluation": Callable(OrderFunctions, "_standard_order_check"),
+		"order_evaluation": Callable(OrderFunctions, "_cat_order_check"),
 	},
 	"chameleon": {
 		"name": "chameleon",
@@ -51,7 +51,7 @@ const clients: Dictionary = {
 		"order_max": 5,
 		"tip_amount": 4,
 		"wait_time": 10,
-		"order_evaluation": Callable(OrderFunctions, "_standard_order_check"),
+		"order_evaluation": Callable(OrderFunctions, "_chameleon_order_check"),
 	},
 	"mammoth": {
 		"name": "mammoth",

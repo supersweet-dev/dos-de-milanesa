@@ -24,6 +24,36 @@ static func _standard_order_check(target_order: Array, submitted_torta: Array, t
     else:
         return -total_price
 
+static func _cat_order_check(target_order: Array, submitted_torta: Array, tip: int) -> int:
+    var total_price = 0
+    for ingredient in submitted_torta:
+        if ingredient in INGREDIENTS.keys():
+            total_price += INGREDIENTS[ingredient].price
+    # Convert both arrays into dictionaries with ingredient counts
+    var count1 = _count_ingredients(target_order)
+    var count2 = _count_ingredients(submitted_torta)
+    if (count1 == count2):
+        SoundManager.play("gato_pass")
+        return total_price + tip
+    else:
+        SoundManager.play("gato_fail")
+        return -total_price
+
+static func _chameleon_order_check(target_order: Array, submitted_torta: Array, tip: int) -> int:
+    var total_price = 0
+    for ingredient in submitted_torta:
+        if ingredient in INGREDIENTS.keys():
+            total_price += INGREDIENTS[ingredient].price
+    # Convert both arrays into dictionaries with ingredient counts
+    var count1 = _count_ingredients(target_order)
+    var count2 = _count_ingredients(submitted_torta)
+    if (count1 == count2):
+        SoundManager.play("camaleon_pass")
+        return total_price + tip
+    else:
+        SoundManager.play("camaleon_fail")
+        return -total_price
+
 static func _mammoth_order_check(target_order: Array, submitted_torta: Array, tip: int) -> int:
     var total_price = 0
     for ingredient in submitted_torta:
@@ -33,8 +63,10 @@ static func _mammoth_order_check(target_order: Array, submitted_torta: Array, ti
     var count1 = _count_ingredients(target_order)
     var count2 = _count_ingredients(submitted_torta)
     if (count1 == count2):
+        SoundManager.play("mamut_pass")
         return total_price + tip
     else:
+        SoundManager.play("mamut_fail")
         return -total_price
 
 static func _xolo_order_check(target_order: Array, submitted_torta: Array, tip: int) -> int:
@@ -48,8 +80,10 @@ static func _xolo_order_check(target_order: Array, submitted_torta: Array, tip: 
 
     for ingredient in required_counts.keys():
         if not submitted_counts.has(ingredient):
+            SoundManager.play("xolo_fail")
             return -total_price # Missing required ingredient
         if submitted_counts[ingredient] < required_counts[ingredient]:
+            SoundManager.play("xolo_fail")
             return -total_price # Not enough of a required ingredient
-
+    SoundManager.play("xolo_pass")
     return total_price + tip # Passed all checks

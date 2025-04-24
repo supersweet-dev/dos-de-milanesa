@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameData="*res://scripts/game_data.gd"
 Globals="*res://scripts/globals.gd"
+SoundManager="*res://scripts/sound_manager.gd"
 
 [display]
 

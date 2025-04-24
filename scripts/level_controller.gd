@@ -171,6 +171,7 @@ func _update_score_display(new_score: int):
 		score_label.text = "$" + str(new_score)
 
 func _apply_penalty(trashed_torta: Array):
+	SoundManager.play("trash_torta")
 	# Calculate penalty based on the number of ingredients in the torta
 	var penalty = 0
 	for ingredient in trashed_torta:
